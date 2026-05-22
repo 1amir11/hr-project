@@ -1,0 +1,4434 @@
+{
+  "name": "HireFlow - HR Action Webhook (Fixed)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "3c0006c6-4a13-4309-9e93-e846af4eb86e",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1968,
+        1344
+      ],
+      "name": "HR Action Webhook",
+      "id": "4a888fbb-ec4b-40a2-b08e-8f634f77d902",
+      "webhookId": "3c0006c6-4a13-4309-9e93-e846af4eb86e"
+    },
+    {
+      "parameters": {
+        "path": "e86b1a2b-8361-4d6c-91fa-6a00ac5798b4",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -3248,
+        1520
+      ],
+      "name": "Candidate Confirm Webhook",
+      "id": "3fa202ad-765e-452c-93d4-58f329a8c0c7",
+      "webhookId": "e86b1a2b-8361-4d6c-91fa-6a00ac5798b4"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "filterByFormula": "={portal_token} = '{{ $json.query.token }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -3024,
+        1520
+      ],
+      "name": "Get Candidate (Direct Confirm)",
+      "id": "4e6a2962-407c-40ac-981c-dc239a2e9ce8"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "status": "Interview Confirmed",
+            "proposed_interview_date": "     ",
+            "proposed_interview_end": "     "
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "candidate_id",
+              "displayName": "candidate_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "job_id",
+              "displayName": "job_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "cv_link",
+              "displayName": "cv_link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "hr_notes",
+              "displayName": "hr_notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "submitted_at",
+              "displayName": "submitted_at",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "interview_date",
+              "displayName": "interview_date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "pending_interview_chat_id",
+              "displayName": "pending_interview_chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "proposed_interview_date",
+              "displayName": "proposed_interview_date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "proposed_interview_end",
+              "displayName": "proposed_interview_end",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "calendar_event_id",
+              "displayName": "calendar_event_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "portal_token",
+              "displayName": "portal_token",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "pre_interview_status",
+              "displayName": "pre_interview_status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Jobs",
+              "displayName": "Jobs",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "CV_Analysis",
+              "displayName": "CV_Analysis",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email_Log",
+              "displayName": "Email_Log",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -2528,
+        1504
+      ],
+      "name": "Update Status (Direct Confirm)",
+      "id": "4e6be448-3375-4f0c-8d1e-c5e62272bf1c"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Confirmed!</title><style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Arial,sans-serif;background:#f0fdf4;display:flex;align-items:center;justify-content:center;min-height:100vh;}.card{background:white;border-radius:16px;padding:48px 40px;text-align:center;max-width:480px;box-shadow:0 8px 32px rgba(0,0,0,0.1);}.icon{font-size:4rem;margin-bottom:20px;}.title{font-size:1.75rem;font-weight:700;color:#15803d;margin-bottom:12px;}.sub{color:#6b7280;font-size:1rem;line-height:1.6;}.date{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px;margin:24px 0;font-size:1.1rem;font-weight:600;color:#166534;}</style></head><body><div class='card'><div class='icon'>✅</div><h1 class='title'>Attendance Confirmed!</h1><p class='sub'>Thank you, <strong>{{ $('Get Candidate (Direct Confirm)').item.json.fields.name }}</strong>!</p><div class='date'>📅 {{ new Date($('Get Candidate (Direct Confirm)').item.json.fields.interview_date).toLocaleString('ar-EG',{timeZone:'Africa/Cairo',weekday:'long',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}) }}</div><p class='sub'>We look forward to seeing you. Good luck! 🎉</p></div></body></html>",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              },
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -2272,
+        1504
+      ],
+      "name": "Respond: Confirmed Page",
+      "id": "3c823b8c-4400-4b4b-beb0-73ad89be9ab2"
+    },
+    {
+      "parameters": {
+        "path": "16a1bd99-1653-4fe7-8a55-a4bf889f153f",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -3264,
+        2032
+      ],
+      "name": "Candidate Reschedule Webhook",
+      "id": "6ec594b6-7147-4193-b6e4-daaf5364202b",
+      "webhookId": "16a1bd99-1653-4fe7-8a55-a4bf889f153f"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || {};\nreturn [{ json: { action: body.action||'', candidate_id: body.candidate_id||'', start: body.start||'', end: body.end||'', readable: body.readable||'', suggestion_text: body.suggestion_text||'', date_text: body.date_text||'' } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1744,
+        1344
+      ],
+      "name": "Extract Body",
+      "id": "4839956a-1020-4982-9e73-234396e61e45"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "accept",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "r1"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "accept"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "confirm_auto",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "r2"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "confirm_auto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "reject_cv",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "r3"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "reject_cv"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "cancel",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "r4"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "cancel"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "reschedule_request",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "r5"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "reschedule_request"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "confirm",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "r6"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "confirm"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "select_slot",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "r7"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "select_slot"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "suggest",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "r8"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "suggest"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "confirm_reschedule",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "r9"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "confirm_reschedule"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "accept_suggestion",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "r_accept_suggestion"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "accept_suggestion"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "=manual_schedule",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "r10"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "manual_schedule"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "reject_proposed",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "r11"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "reject_proposed"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -1536,
+        1344
+      ],
+      "name": "Action Router",
+      "id": "d4e93c0f-72b9-4311-bb39-92a8e935065c"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "filterByFormula": "={candidate_id} = '{{ $('Extract Body').item.json.candidate_id }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -1248,
+        128
+      ],
+      "name": "Get Candidate (Accept)",
+      "id": "24f57152-8a55-4cca-883c-af96f1598b3b",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ILcKl9bnDuXNmJMT",
+          "name": "HR"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "calendar",
+        "calendar": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_CALENDAR_ID@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "N8N"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1008,
+        128
+      ],
+      "name": "Get Calendar Slots (Accept)",
+      "id": "805b171c-29eb-4064-9597-bf8425e95486"
+    },
+    {
+      "parameters": {
+        "jsCode": "const proposed_dates = $('Get Proposed Dates (Accept)').all()\n  .filter(r => r.json?.fields?.proposed_interview_date)\n  .map(r => ({\n    json: {\n      start: { dateTime: r.json.fields.proposed_interview_date },\n      end: { dateTime: r.json.fields.proposed_interview_end }\n    }\n  }));\n\nconst events = [...$input.all(), ...proposed_dates];\n\nconst proposed =\n  ($('Get Candidate (Accept)').first()?.json?.fields?.proposed_interview_date || '')\n    .trim() || null;\n\nconst WORK_START = 10,\n      WORK_END = 18,\n      DUR = 60,\n      BUF = 15,\n      TOTAL = 75;\n\nconst now = new Date();\n\nconst EGY = 3 * 60 * 60 * 1000;\n\nfunction safeDate(v) {\n\n  if (!v || typeof v !== 'string') {\n    return null;\n  }\n\n  const clean = v.trim();\n\n  if (!clean) {\n    return null;\n  }\n\n  const d = new Date(clean);\n\n  return isNaN(d.getTime()) ? null : d;\n}\n\nfunction toEgy(d) {\n\n  if (!d || isNaN(d.getTime())) {\n    throw new Error(`Invalid date in toEgy(): ${d}`);\n  }\n\n  return new Date(d.getTime() + EGY);\n}\n\nfunction egyDate(d) {\n\n  if (!d || isNaN(d.getTime())) {\n    throw new Error(`Invalid date in egyDate(): ${d}`);\n  }\n\n  const e = toEgy(d);\n\n  return e.toISOString().slice(0,10);\n}\n\nfunction getTime(t) {\n\n  const d = new Date(t?.dateTime || t);\n\n  return isNaN(d.getTime()) ? null : d;\n}\n\nconst AR_DAYS = [\n  'الأحد','الاثنين','الثلاثاء',\n  'الأربعاء','الخميس','الجمعة','السبت'\n];\n\nconst AR_MON = [\n  'يناير','فبراير','مارس','أبريل',\n  'مايو','يونيو','يوليو','أغسطس',\n  'سبتمبر','أكتوبر','نوفمبر','ديسمبر'\n];\n\nfunction readable(d) {\n  const e = toEgy(d);\n  const hh = String(e.getUTCHours()).padStart(2, '0');\n  const mm = String(e.getUTCMinutes()).padStart(2, '0');\n  return AR_DAYS[e.getUTCDay()] + ' ' + e.getUTCDate() + ' ' + AR_MON[e.getUTCMonth()] + ' \\u0627\\u0644\\u0633\\u0627\\u0639\\u0629 ' + hh + ':' + mm;\n}\n\n\n// =======================================\n// start date\n// =======================================\n\nlet startBase = now;\n\nif (proposed) {\n\n  const p = safeDate(proposed);\n\n  if (!p) {\n    throw new Error(`Invalid proposed date: ${proposed}`);\n  }\n\n  startBase = p;\n}\n\nstartBase = new Date(Math.max(startBase.getTime(), now.getTime()));\n\n\n// =======================================\n// collect all possible slots\n// =======================================\n\nconst possible = [];\n\nfor (let day = 0; day < 14; day++) {\n\n  const d = new Date(\n    startBase.getTime() + day * 86400000\n  );\n\n  if (isNaN(d.getTime())) {\n    throw new Error(`Invalid d at day ${day}`);\n  }\n\n  const wd = toEgy(d).getUTCDay();\n\n  if (wd === 5 || wd === 6) continue;\n\n  const ds = egyDate(d);\n\n  let cur = new Date(\n    `${ds}T${String(WORK_START-3).padStart(2,'0')}:00:00Z`\n  );\n\n  const wEnd = new Date(\n    `${ds}T${String(WORK_END-3).padStart(2,'0')}:00:00Z`\n  );\n\n  if (isNaN(cur.getTime()) || isNaN(wEnd.getTime())) {\n    throw new Error(`Invalid work hours date for ds=${ds}`);\n  }\n\n  while (cur < wEnd) {\n\n    const iEnd = new Date(\n      cur.getTime() + DUR * 60000\n    );\n\n    const bEnd = new Date(\n      cur.getTime() + TOTAL * 60000\n    );\n\n    if (iEnd > wEnd) break;\n\n    if (cur <= now) {\n      cur = bEnd;\n      continue;\n    }\n\n    let ok = true;\n\n    for (const item of events) {\n\n      const ev = item.json;\n\n      if (!ev.start || !ev.end) continue;\n\n      const es = getTime(ev.start);\n      const eeBase = getTime(ev.end);\n\n      if (!es || !eeBase) continue;\n\n      const ee = new Date(\n        eeBase.getTime() + BUF * 60000\n      );\n\n      if (cur < ee && bEnd > es) {\n        ok = false;\n        break;\n      }\n    }\n\n    if (ok) {\n\n      possible.push({\n        start: cur.toISOString(),\n        end: iEnd.toISOString(),\n        readable: readable(cur)\n      });\n    }\n\n    cur = bEnd;\n  }\n}\n\n\n// =======================================\n// next slot\n// =======================================\n\nif (possible.length > 0) {\n\n  const slot = possible[0];\n\n  return [{ json: slot }];\n}\n\n\n// =======================================\n// no slot\n// =======================================\n\nreturn [{\n  json: {\n    error: 'no_slot',\n    message: 'No available slots'\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -432,
+        128
+      ],
+      "name": "Find Next Slot (Accept)",
+      "id": "8a9af465-3272-4520-afcc-f772175932eb"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -240,
+        112
+      ],
+      "name": "Slot Found?",
+      "id": "f3f097dc-fcd0-48d4-9ed4-adb37523c4ea"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Get Candidate (Accept)').item.json.id }}",
+            "proposed_interview_date": "={{ $('Find Next Slot (Accept)').item.json.start }}",
+            "proposed_interview_end": "={{ $('Find Next Slot (Accept)').item.json.end }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "proposed_interview_date",
+              "displayName": "proposed_interview_date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "proposed_interview_end",
+              "displayName": "proposed_interview_end",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "name": "Save Proposed Slot",
+      "id": "48e2b54d-309e-4e9a-a542-301eb16b750a"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'confirm_slot', slot_start: $('Find Next Slot (Accept)').item.json.start, slot_end: $('Find Next Slot (Accept)').item.json.end, slot_readable: $('Find Next Slot (Accept)').item.json.readable }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        224,
+        0
+      ],
+      "name": "Respond: Slot Found",
+      "id": "eab5f89c-8117-4eed-b267-566040acccff"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"need_date\", \"message\": \"No available slots. Please use manual scheduling.\" }",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        128,
+        176
+      ],
+      "name": "Respond: No Slot",
+      "id": "465fe1f5-a875-4b94-8a8c-c05ebaae0171"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "filterByFormula": "={candidate_id} = '{{ $('Extract Body').item.json.candidate_id }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -1248,
+        400
+      ],
+      "name": "Get Candidate (Confirm Auto)",
+      "id": "70023225-4ed1-44f0-9de4-737cb934972d"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_JOBS_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Jobs"
+        },
+        "filterByFormula": "={job_id} = '{{ $('Get Candidate (Confirm Auto)').item.json.fields.job_id }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -1040,
+        400
+      ],
+      "name": "Get Job (Confirm Auto)",
+      "id": "c1515c8c-7262-449f-8ff6-af96e32607f4"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_CALENDAR_ID@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "N8N"
+        },
+        "start": "={{ $('Get Candidate (Confirm Auto)').item.json.fields.proposed_interview_date }}",
+        "end": "={{ $('Get Candidate (Confirm Auto)').item.json.fields.proposed_interview_end }}",
+        "useDefaultReminders": false,
+        "additionalFields": {
+          "summary": "={{ $('Get Candidate (Confirm Auto)').item.json.fields.name }} — Interview — {{ $('Get Job (Confirm Auto)').item.json.fields.title }}"
+        },
+        "remindersUi": {
+          "remindersValues": []
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        32,
+        384
+      ],
+      "name": "Create Calendar Event (Confirm Auto)",
+      "id": "d81f05ad-5c37-452a-88cc-bc2e4ddc24f7"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get Candidate (Confirm Auto)').item.json.fields.email }}",
+        "subject": "=🎉 Interview Invitation — {{ $('Get Job (Confirm Auto)').item.json.fields.title }}",
+        "message": "=<!DOCTYPE html>\n<html>\n<body style=\"margin:0;padding:0;background:#f4f4f5;font-family:Arial,sans-serif;\">\n\n  <div style=\"max-width:600px;margin:40px auto;background:#ffffff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;\">\n\n    <!-- Header -->\n    <div style=\"padding:32px 40px;border-bottom:1px solid #e5e7eb;background:#111827;\">\n      <h1 style=\"margin:0;color:#ffffff;font-size:24px;font-weight:600;\">\n        Interview Invitation\n      </h1>\n\n      <p style=\"margin:10px 0 0;color:#d1d5db;font-size:14px;\">\n        {{ $('Get Job (Confirm Auto)').item.json.fields.title }}\n      </p>\n    </div>\n\n    <!-- Content -->\n    <div style=\"padding:40px;\">\n\n      <p style=\"margin:0 0 12px;color:#111827;font-size:15px;line-height:1.6;\">\n        Dear <strong>{{ $('Get Candidate (Confirm Auto)').item.json.fields.name }}</strong>,\n      </p>\n\n      <p style=\"margin:0 0 28px;color:#4b5563;font-size:15px;line-height:1.7;\">\n        We are pleased to invite you to an interview for the position above.\n        Please review the scheduled interview details below and confirm your attendance.\n      </p>\n\n      <!-- Interview Details -->\n      <div style=\"border:1px solid #d1d5db;border-radius:8px;padding:24px;background:#fafafa;margin-bottom:32px;\">\n\n        <p style=\"margin:0 0 8px;color:#6b7280;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;\">\n          Interview Date & Time\n        </p>\n\n        <p style=\"margin:0;color:#111827;font-size:18px;font-weight:600;line-height:1.5;\">\n          {{ new Date($('Get Candidate (Confirm Auto)').item.json.fields.proposed_interview_date).toLocaleString('ar-EG',{\n            timeZone:'Africa/Cairo',\n            weekday:'long',\n            month:'long',\n            day:'numeric',\n            hour:'2-digit',\n            minute:'2-digit'\n          }) }}\n        </p>\n\n      </div>\n\n      <!-- Actions -->\n      <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"margin-bottom:24px;\">\n        <tr>\n\n          <td style=\"width:50%;padding-right:8px;vertical-align:top;\">\n\n            <a href=\"https://YOUR_N8N_PUBLIC_URL/webhook/candidate-confirm?token={{ $('Generate Token (Auto)').item.json.token }}\"\n               style=\"display:block;background:#111827;color:#ffffff;text-align:center;padding:14px 12px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:600;\">\n              Confirm Attendance\n            </a>\n\n          </td>\n\n          <td style=\"width:50%;padding-left:8px;vertical-align:top;\">\n\n            <a href=\"https://YOUR_N8N_PUBLIC_URL/webhook/candidate-reschedule?token={{ $('Generate Token (Auto)').item.json.token }}\"\n               style=\"display:block;background:#ffffff;color:#111827;text-align:center;padding:14px 12px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:600;border:1px solid #d1d5db;\">\n              Request Reschedule\n            </a>\n\n          </td>\n\n        </tr>\n      </table>\n\n      <p style=\"margin:0;color:#6b7280;font-size:13px;line-height:1.6;\">\n        Both options will direct you to your secure candidate portal to complete the requested action.\n      </p>\n\n    </div>\n\n    <!-- Footer -->\n    <div style=\"padding:20px 40px;border-top:1px solid #e5e7eb;background:#fafafa;text-align:center;\">\n\n      <p style=\"margin:0;color:#9ca3af;font-size:12px;\">\n        HireFlow HR Team · Please do not reply to this email.\n      </p>\n\n    </div>\n\n  </div>\n\n</body>\n</html>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        240,
+        384
+      ],
+      "name": "Send Interview Invitation (Confirm Auto)",
+      "id": "cc9d3ac3-6c24-4151-882f-b0fad5b59ba9",
+      "webhookId": "68f3c734-7356-47f0-8c1c-9d46627f914d"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Get Candidate (Confirm Auto)').item.json.id }}",
+            "status": "Interview Scheduled",
+            "interview_date": "={{ $('Get Candidate (Confirm Auto)').item.json.fields.proposed_interview_date }}",
+            "calendar_event_id": "={{ $('Create Calendar Event (Confirm Auto)').item.json.id }}",
+            "pre_interview_status": "={{ $('Get Candidate (Confirm Auto)').item.json.fields.status }}",
+            "proposed_interview_date": "",
+            "proposed_interview_end": "",
+            "suggested_datetime": ""
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "candidate_id",
+              "displayName": "candidate_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "job_id",
+              "displayName": "job_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "cv_link",
+              "displayName": "cv_link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "hr_notes",
+              "displayName": "hr_notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "submitted_at",
+              "displayName": "submitted_at",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "interview_date",
+              "displayName": "interview_date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "pending_interview_chat_id",
+              "displayName": "pending_interview_chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "proposed_interview_date",
+              "displayName": "proposed_interview_date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "proposed_interview_end",
+              "displayName": "proposed_interview_end",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "calendar_event_id",
+              "displayName": "calendar_event_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "portal_token",
+              "displayName": "portal_token",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "pre_interview_status",
+              "displayName": "pre_interview_status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Jobs",
+              "displayName": "Jobs",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "CV_Analysis",
+              "displayName": "CV_Analysis",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email_Log",
+              "displayName": "Email_Log",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        432,
+        384
+      ],
+      "name": "Update Candidate (Confirm Auto)",
+      "id": "bd912ae7-0600-45b2-b321-4ce6f51a0dbf"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"success\", \"message\": \"✅ Interview scheduled and invitation sent!\" }",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        720,
+        384
+      ],
+      "name": "Respond: Confirm Auto OK",
+      "id": "82467243-5cb8-4357-b29a-6a3815da25d5"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "filterByFormula": "={candidate_id} = '{{ $('Extract Body').item.json.candidate_id }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -1232,
+        688
+      ],
+      "name": "Get Candidate (Reject)",
+      "id": "4bed7bd6-e7a2-4206-8369-d7b55210d3ec"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_JOBS_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Jobs"
+        },
+        "filterByFormula": "={job_id} = '{{ $('Get Candidate (Reject)').item.json.fields.job_id }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -992,
+        688
+      ],
+      "name": "Get Job (Reject)",
+      "id": "5f7a75a0-c724-4140-a745-ed7ada062577"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get Candidate (Reject)').item.json.fields.email }}",
+        "subject": "=Regarding your application — {{ $('Get Job (Reject)').item.json.fields.title }}",
+        "message": "=Dear {{ $('Get Candidate (Reject)').item.json.fields.name }},\n\nThank you for applying for the {{ $('Get Job (Reject)').item.json.fields.title }} position.\n\nAfter careful review of your qualifications, we regret to inform you that we will not be moving forward with your application at this time.\n\nWe appreciate the time and effort you invested in this process and wish you success in your job search.\n\nBest regards,\nHR Team",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -576,
+        688
+      ],
+      "name": "Send Rejection Email",
+      "id": "0e4cf087-1966-4589-9da8-3f3e27c45279",
+      "webhookId": "cc0955c4-d803-4196-bb72-54e4af503ec3"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Get Candidate (Reject)').item.json.id }}",
+            "status": "Rejected"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -800,
+        688
+      ],
+      "name": "Update Candidate (Reject)",
+      "id": "1f9c222e-5e89-49ee-a7a0-68ff80f73735"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"success\", \"message\": \"Rejection email sent.\" }",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -304,
+        688
+      ],
+      "name": "Respond: Reject OK",
+      "id": "de70dc72-f48c-415e-bcf6-eaea14e9c297"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "filterByFormula": "={candidate_id} = '{{ $('Extract Body').item.json.candidate_id }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -1232,
+        864
+      ],
+      "name": "Get Candidate (Cancel)",
+      "id": "92dfd80f-e5b6-4d46-9681-4780b0be762c"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_CALENDAR_ID@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "N8N"
+        },
+        "eventId": "={{ $('Get Candidate (Cancel)').item.json.fields.calendar_event_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -640,
+        864
+      ],
+      "name": "Delete Calendar Event",
+      "id": "f167729e-4e0b-453e-b613-774237c42bb1"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get Candidate (Cancel)').item.json.fields.email }}",
+        "subject": "=Interview Cancellation — Update",
+        "message": "=Dear {{ $('Get Candidate (Cancel)').item.json.fields.name }},\n\nWe regret to inform you that your scheduled interview has been cancelled.\n\nOur HR team will contact you shortly to discuss the next steps.\n\nWe apologise for any inconvenience.\n\nBest regards,\nHR Team",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -416,
+        864
+      ],
+      "name": "Send Cancellation Email",
+      "id": "48af6313-656c-43df-a0a5-6702f123385d",
+      "webhookId": "280c540e-11e2-47db-951d-046f6b9835f4"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Get Candidate (Cancel)').item.json.id }}",
+            "status": "={{ $('Get Candidate (Cancel)').item.json.fields.pre_interview_status || 'Shortlist' }}",
+            "interview_date": "  ",
+            "calendar_event_id": "   "
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "interview_date",
+              "displayName": "interview_date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "calendar_event_id",
+              "displayName": "calendar_event_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -192,
+        864
+      ],
+      "name": "Update Candidate (Cancel)",
+      "id": "0d0f9961-28c3-4cba-91fb-933902faf0ef"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"success\", \"message\": \"Interview cancelled and candidate notified.\" }",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        48,
+        864
+      ],
+      "name": "Respond: Cancel OK",
+      "id": "df9e7c48-6167-478d-bb24-f72d45a2b41a"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "filterByFormula": "={candidate_id} = '{{ $('Extract Body').item.json.candidate_id }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -1248,
+        1280
+      ],
+      "name": "Get Candidate (Reschedule)",
+      "id": "1f4022ab-c33f-4d1b-99b7-fbd429c39e2b"
+    },
+    {
+      "parameters": {
+        "resource": "calendar",
+        "calendar": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_CALENDAR_ID@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "N8N"
+        },
+        "timeMax": "={{ $now.plus(14, 'days') }}",
+        "options": {
+          "timezone": {
+            "__rl": true,
+            "value": "Africa/Cairo",
+            "mode": "list",
+            "cachedResultName": "Africa/Cairo"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -416,
+        1296
+      ],
+      "name": "Get Calendar (Reschedule)",
+      "id": "1c3b337a-8802-4250-a5fb-664b71d0efc8"
+    },
+    {
+      "parameters": {
+        "jsCode": "const calendarEvents = $('Get Calendar (Reschedule)').all();\nconst proposed = $('Get Proposed Dates').all();\n\nconst WORK_START = 10,\n      WORK_END = 18,\n      DUR = 60,\n      BUF = 15,\n      TOTAL = 75;\n\nconst now = new Date();\nconst EGY = 3 * 60 * 60 * 1000;\n\nfunction toEgy(d) {\n  return new Date(d.getTime() + EGY);\n}\n\nfunction egyDate(d) {\n  const e = toEgy(d);\n  return e.toISOString().slice(0,10);\n}\n\nfunction getTime(t) {\n  return new Date(t?.dateTime || t);\n}\n\nconst AR_DAYS = [\n  'الأحد','الاثنين','الثلاثاء',\n  'الأربعاء','الخميس','الجمعة','السبت'\n];\n\nconst AR_MON = [\n  'يناير','فبراير','مارس','أبريل',\n  'مايو','يونيو','يوليو','أغسطس',\n  'سبتمبر','أكتوبر','نوفمبر','ديسمبر'\n];\n\nfunction readable(d) {\n  const e = toEgy(d);\n  const hh = String(e.getUTCHours()).padStart(2, '0');\n  const mm = String(e.getUTCMinutes()).padStart(2, '0');\n  return AR_DAYS[e.getUTCDay()] + ' ' + e.getUTCDate() + ' ' + AR_MON[e.getUTCMonth()] + ' \\u0627\\u0644\\u0633\\u0627\\u0639\\u0629 ' + hh + ':' + mm;\n}\n\n// ===== دمج الـ Calendar Events + Proposed Dates =====\n\nconst proposedAsEvents = proposed\n  .filter(r =>\n    r.json.fields.proposed_interview_date &&\n    r.json.fields.proposed_interview_end\n  )\n  .map(r => ({\n    json: {\n      start: {\n        dateTime: r.json.fields.proposed_interview_date\n      },\n      end: {\n        dateTime: r.json.fields.proposed_interview_end\n      }\n    }\n  }));\n\nconst allBlocked = [...calendarEvents, ...proposedAsEvents];\n\n// ===== Generate Slots =====\n\nconst slots = [];\nconst usedDays = new Set();\n\nfor (let day = 0; day < 14 && slots.length < 3; day++) {\n\n  const d = new Date(now.getTime() + day * 86400000);\n\n  const wd = toEgy(d).getUTCDay();\n\n  // Friday + Saturday\n  if (wd === 5 || wd === 6) continue;\n\n  const ds = egyDate(d);\n\n  if (usedDays.has(ds)) continue;\n\n  const hours = [10,11,12,13,14,15,16];\n\n  for (const h of hours) {\n\n    const cur = new Date(\n      `${ds}T${String(h - 3).padStart(2,'0')}:00:00Z`\n    );\n\n    const iEnd = new Date(cur.getTime() + DUR * 60000);\n\n    const bEnd = new Date(cur.getTime() + TOTAL * 60000);\n\n    const wEnd = new Date(\n      `${ds}T${String(WORK_END - 3).padStart(2,'0')}:00:00Z`\n    );\n\n    if (iEnd > wEnd || cur <= now) continue;\n\n    let ok = true;\n\n    for (const item of allBlocked) {\n\n      const ev = item.json;\n\n      if (!ev.start || !ev.end) continue;\n\n      const es = getTime(ev.start);\n\n      const ee = new Date(\n        getTime(ev.end).getTime() + BUF * 60000\n      );\n\n      // overlap check\n      if (cur < ee && bEnd > es) {\n        ok = false;\n        break;\n      }\n    }\n\n    if (ok) {\n\n      slots.push({\n        start: cur.toISOString(),\n        end: iEnd.toISOString(),\n        readable: readable(cur)\n      });\n\n      usedDays.add(ds);\n\n      break;\n    }\n  }\n}\n\nreturn [\n  {\n    json: {\n      slots\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        1296
+      ],
+      "name": "Find 3 Available Slots",
+      "id": "1d0b3a28-175c-4685-b02c-672d5b419b69"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Get Candidate (Reschedule)').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        1232
+      ],
+      "name": "Update Candidate (Reschedule)",
+      "id": "b2aa1201-fd9a-4863-84da-b19833901aa7"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'slots_available', slots: $('Find 3 Available Slots').item.json.slots }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1024,
+        1232
+      ],
+      "name": "Respond: Reschedule Slots",
+      "id": "6dc7028b-197c-4305-bb42-387cf2c27b4c"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "filterByFormula": "={candidate_id} = '{{ $('Extract Body').item.json.candidate_id }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -1264,
+        1808
+      ],
+      "name": "Get Candidate (Manual)",
+      "id": "4e9a7232-d9a3-4845-9976-ef5d9ba87d05"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_JOBS_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Jobs"
+        },
+        "filterByFormula": "={job_id} = '{{ $('Get Candidate (Manual)').item.json.fields.job_id }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -1056,
+        1808
+      ],
+      "name": "Get Job (Manual)",
+      "id": "7578ae1e-4769-4ce9-add2-59b3e4e901a9"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Extract Body').item.json.date_text }}",
+        "options": {
+          "systemMessage": "SYSTEM:\nYou are a strict date extraction engine.\n\nYou MUST:\n\n* Ignore any example dates.\n* Ignore prior context.\n* Use ONLY the provided current datetime reference.\n* Never invent a date.\n* Never default to 2023 or 2024.\n* Return ONLY raw JSON.\n\nTODAY:\n{{ $now.toISO() }}\n\nUSER MESSAGE:\n{{ $json.message }}\n\nRULES:\n\n* Missing date => {\"error\":\"unclear\"}\n* Missing time => {\"error\":\"unclear\"}\n* Both required.\n* Relative dates must be calculated from TODAY.\n* Output format:\n  {\"date\":\"YYYY-MM-DD\",\"time\":\"HH:MM\",\"readable\":\"Arabic sentence\"}\nIN 2026"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -832,
+        1808
+      ],
+      "name": "AI Parse Date (Manual)",
+      "id": "f74f2492-edc3-4549-a2e2-f7c02df17323"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -896,
+        2032
+      ],
+      "name": "OpenRouter (Manual)",
+      "id": "9aaed1f1-da18-46aa-93c3-fd87d2f61dfe"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst raw = $input.first().json.output || '';\nconst clean = raw.replace(/```json|```/g,'').trim();\nlet parsed;\ntry { parsed = JSON.parse(clean); } catch(e) { return [{ json: { error: 'parse_failed' } }]; }\nif (parsed.error) return [{ json: { error: parsed.error } }];\n// Build ISO datetime from date + time\nconst dt = new Date(`${parsed.date}T${parsed.time}:00+03:00`);\nif (isNaN(dt)) return [{ json: { error: 'invalid_date' } }];\nconst end = new Date(dt.getTime() + 60*60000);\nreturn [{ json: { start: dt.toISOString(), end: end.toISOString(), readable: parsed.readable || dt.toLocaleString('ar-EG',{timeZone:'Africa/Cairo',weekday:'long',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}) } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -544,
+        1808
+      ],
+      "name": "Parse Date Output",
+      "id": "a9da2afc-79f4-423d-b698-1d22ff2beeec"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "md1",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "39c40dcb-ac84-4a75-9636-c71a2276bd4a",
+              "leftValue": "={{ !$('Get Calendar (Manual)').all().filter(ev => ev.json?.start).some(ev => {\n  const es = new Date(ev.json.start?.dateTime);\n  const ee = new Date(ev.json.end?.dateTime);\n  const ms = new Date($('Parse Date Output').item.json.start);\n  const me = new Date($('Parse Date Output').item.json.end);\n  return ms < ee && me > es;\n}) }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -112,
+        1808
+      ],
+      "name": "Date Valid?",
+      "id": "401f3cd4-316a-4cde-a7cb-0009c0773c7d"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_CALENDAR_ID@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "N8N"
+        },
+        "start": "={{ $('Parse Date Output').item.json.start }}",
+        "end": "={{ $('Parse Date Output').item.json.end }}",
+        "useDefaultReminders": false,
+        "additionalFields": {
+          "summary": "={{ $('Get Candidate (Manual)').item.json.fields.name }} — Interview — {{ $('Get Job (Manual)').item.json.fields.title }}"
+        },
+        "remindersUi": {
+          "remindersValues": []
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        656,
+        1696
+      ],
+      "name": "Create Calendar Event (Manual)",
+      "id": "60da5786-03f8-44ca-a5ef-1ac60d8be4a9"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get Candidate (Manual)').item.json.fields.email }}",
+        "subject": "=Interview Invitation — {{ $('Get Job (Manual)').item.json.fields.title }}",
+        "message": "=<!DOCTYPE html>\n<html>\n<body style=\"margin:0;padding:0;background:#f4f4f5;font-family:Arial,sans-serif;\">\n  <div style=\"max-width:600px;margin:40px auto;background:#ffffff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;\">\n\n    <div style=\"padding:32px 40px;background:#111827;\">\n      <h1 style=\"margin:0;color:#ffffff;font-size:24px;\">Interview Invitation</h1>\n      <p style=\"margin:10px 0 0;color:#d1d5db;font-size:14px;\">\n        {{ $('Get Job (Manual)').item.json.fields.title }}\n      </p>\n    </div>\n\n    <div style=\"padding:40px;\">\n      <p style=\"color:#111827;\">\n        Dear <strong>{{ $('Get Candidate (Manual)').item.json.fields.name }}</strong>,\n      </p>\n      <p style=\"color:#4b5563;\">\n        Your interview has been scheduled. Please see the details below.\n      </p>\n\n      <div style=\"border:1px solid #d1d5db;border-radius:8px;padding:24px;background:#fafafa;margin:24px 0;\">\n        <p style=\"margin:0 0 8px;color:#6b7280;font-size:12px;text-transform:uppercase;\">Interview Date & Time</p>\n        <p style=\"margin:0;color:#111827;font-size:18px;font-weight:600;\">\n          {{ $('Parse Date Output').item.json.readable }}\n        </p>\n      </div>\n\n      <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n        <tr>\n          <td style=\"width:50%;padding-right:8px;\">\n            <a href=\"https://YOUR_N8N_PUBLIC_URL/webhook/candidate-confirm?token={{ $('Generate Token (Manual)').item.json.token }}\"\n               style=\"display:block;background:#111827;color:#ffffff;text-align:center;padding:14px;border-radius:6px;text-decoration:none;font-weight:600;\">\n              Confirm Attendance\n            </a>\n          </td>\n          <td style=\"width:50%;padding-left:8px;\">\n            <a href=\"https://YOUR_N8N_PUBLIC_URL/webhook/candidate-reschedule?token={{ $('Generate Token (Manual)').item.json.token }}\"\n               style=\"display:block;background:#ffffff;color:#111827;text-align:center;padding:14px;border-radius:6px;text-decoration:none;font-weight:600;border:1px solid #d1d5db;\">\n              Request Reschedule\n            </a>\n          </td>\n        </tr>\n      </table>\n    </div>\n\n    <div style=\"padding:20px 40px;border-top:1px solid #e5e7eb;text-align:center;\">\n      <p style=\"margin:0;color:#9ca3af;font-size:12px;\">HireFlow HR Team</p>\n    </div>\n\n  </div>\n</body>\n</html>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        1696
+      ],
+      "name": "Send Interview Invitation (Manual)",
+      "id": "6f75a400-c675-42ab-842b-2e273cea12f2",
+      "webhookId": "27445c8c-b5cd-431c-88e2-7fc72e945b7c"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Get Candidate (Manual)').item.json.id }}",
+            "status": "=Interview Scheduled",
+            "interview_date": "={{ $('Parse Date Output').item.json.start }}",
+            "calendar_event_id": "={{ $('Create Calendar Event (Manual)').item.json.id }}",
+            "pre_interview_status": "={{ $('Get Candidate (Manual)').item.json.fields.status }}",
+            "proposed_interview_date": "",
+            "proposed_interview_end": "",
+            "suggested_datetime": ""
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "candidate_id",
+              "displayName": "candidate_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "job_id",
+              "displayName": "job_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "cv_link",
+              "displayName": "cv_link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "hr_notes",
+              "displayName": "hr_notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "submitted_at",
+              "displayName": "submitted_at",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "interview_date",
+              "displayName": "interview_date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "pending_interview_chat_id",
+              "displayName": "pending_interview_chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "proposed_interview_date",
+              "displayName": "proposed_interview_date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "proposed_interview_end",
+              "displayName": "proposed_interview_end",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "calendar_event_id",
+              "displayName": "calendar_event_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "portal_token",
+              "displayName": "portal_token",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "pre_interview_status",
+              "displayName": "pre_interview_status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Jobs",
+              "displayName": "Jobs",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "CV_Analysis",
+              "displayName": "CV_Analysis",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email_Log",
+              "displayName": "Email_Log",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1104,
+        1696
+      ],
+      "name": "Update Candidate (Manual)",
+      "id": "2cc84e9d-3972-4a3b-98c2-b51648c2ed2b"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'success', message: '✅ Interview scheduled!', interview_date: $('Parse Date Output').item.json.readable }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1328,
+        1696
+      ],
+      "name": "Respond: Manual OK",
+      "id": "a6d90c11-c343-4220-ab2b-ff7ad0d0945a"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \n  \"status\": \"conflict\", \n  \"message\": \"هذا الوقت محجوز بالفعل. من فضلك اختر وقت آخر.\" \n}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        112,
+        1904
+      ],
+      "name": "Respond: Unclear Date",
+      "id": "293d4fec-e6ba-45f3-9aff-65d720b49336"
+    },
+    {
+      "parameters": {
+        "jsCode": "const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';\nlet token = '';\nfor (let i = 0; i < 32; i++) token += chars[Math.floor(Math.random() * chars.length)];\nreturn [{ json: { token } }];"
+      },
+      "name": "Generate Token (Auto)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -288,
+        384
+      ],
+      "id": "110e211b-6b00-47e0-9736-5b9b63805215"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Get Candidate (Confirm Auto)').item.json.id }}",
+            "portal_token": "={{ $('Generate Token (Auto)').item.json.token }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "portal_token",
+              "displayName": "portal_token",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "name": "Save Token (Auto)",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -128,
+        384
+      ],
+      "id": "76f03bd8-38b0-4c6a-89ae-e4a540e3251a"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ca1",
+              "leftValue": "={{ $('Get Candidate (Confirm Auto)').item.json.fields.proposed_interview_date }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "4b73dc7e-792d-4823-8da7-f1a2f61a9549",
+              "leftValue": "={{ !$('Check Slot Conflict (Auto)1').all().filter(ev => ev.json?.start).some(ev => {\n  const es = new Date(ev.json.start?.dateTime);\n  const ee = new Date(ev.json.end?.dateTime);\n  const ms = new Date($('Get Candidate (Confirm Auto)').item.json.fields.proposed_interview_date);\n  const me = new Date($('Get Candidate (Confirm Auto)').item.json.fields.proposed_interview_end);\n  return ms < ee && me > es;\n}) }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -576,
+        400
+      ],
+      "name": "Has Proposed Slot? (Auto)",
+      "id": "687cec66-c6d0-4398-8c20-262bde8d34e1"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"status\": \"conflict\", \"message\": \"Slot is no longer available, please run Auto-suggest again.\" }",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -416,
+        544
+      ],
+      "name": "Respond: No Proposed Slot",
+      "id": "19c2f4dd-0561-437f-a992-6de165456981"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "filterByFormula": "={portal_token} = '{{ $json.query.token }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -3072,
+        2032
+      ],
+      "name": "Get Candidate (Web Reschedule)",
+      "id": "580b0d0d-1592-4533-84df-58007b776a87",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ILcKl9bnDuXNmJMT",
+          "name": "HR"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_CALENDAR_ID@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "N8N"
+        },
+        "returnAll": true,
+        "timeMax": "={{ $now.plus({ week:2 }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -2816,
+        1888
+      ],
+      "name": "Get Calendar (Web Reschedule)",
+      "id": "25863a55-0d9e-4ce2-81ab-9c3de6d968cd"
+    },
+    {
+      "parameters": {
+        "jsCode": "const candidate = $('Get Candidate (Web Reschedule)').item.json;\nconst fields = candidate.fields || {};\nconst events = $('Get Calendar (Web Reschedule)').all();\nconst proposed = $('Get Proposed Dates (Web)').all();\n\nfunction parseSlotList(value) {\n  if (!value) return [];\n  if (Array.isArray(value)) return value.map(String).filter(Boolean);\n  const text = String(value).trim();\n  if (!text) return [];\n  try {\n    const parsed = JSON.parse(text);\n    if (Array.isArray(parsed)) {\n      return parsed\n        .map(item => typeof item === 'string' ? item : item?.start)\n        .filter(Boolean);\n    }\n  } catch (e) {}\n  return text.split(',').map(s => s.trim()).filter(Boolean);\n}\n\nconst offeredSlots = new Set(parseSlotList(fields.offered_slots));\n\n\n\nfunction candidateBlocks(records) {\n  const blocks = [];\n  for (const r of records) {\n    const f = r?.json?.fields || {};\n    if (f.proposed_interview_date) {\n      blocks.push({\n        json: {\n          start: { dateTime: f.proposed_interview_date },\n          end: { dateTime: f.proposed_interview_end || new Date(new Date(f.proposed_interview_date).getTime() + 60 * 60000).toISOString() }\n        }\n      });\n    }\n    if (f.interview_date) {\n      blocks.push({\n        json: {\n          start: { dateTime: f.interview_date },\n          end: { dateTime: new Date(new Date(f.interview_date).getTime() + 60 * 60000).toISOString() }\n        }\n      });\n    }\n  }\n  return blocks;\n}\n\nconst allBlocked = [...events, ...candidateBlocks(proposed)];\n\nconst WORK_START = 10,\n      WORK_END = 18,\n      DUR = 60,\n      BUF = 15,\n      TOTAL = 75;\n\nconst now = new Date();\nconst EGY = 3 * 60 * 60 * 1000;\n\nfunction toEgy(d) { return new Date(d.getTime() + EGY); }\nfunction egyDate(d) { const e = toEgy(d); return e.toISOString().slice(0, 10); }\nfunction getTime(t) { const d = new Date(t?.dateTime || t); return isNaN(d.getTime()) ? null : d; }\nfunction sameInstant(a, b) { const da = new Date(a); const db = new Date(b); return !isNaN(da) && !isNaN(db) && da.getTime() === db.getTime(); }\n\nconst AR_DAYS = ['\\u0627\\u0644\\u0623\\u062d\\u062f','\\u0627\\u0644\\u0627\\u062b\\u0646\\u064a\\u0646','\\u0627\\u0644\\u062b\\u0644\\u0627\\u062b\\u0627\\u0621','\\u0627\\u0644\\u0623\\u0631\\u0628\\u0639\\u0627\\u0621','\\u0627\\u0644\\u062e\\u0645\\u064a\\u0633','\\u0627\\u0644\\u062c\\u0645\\u0639\\u0629','\\u0627\\u0644\\u0633\\u0628\\u062a'];\nconst AR_MON = ['\\u064a\\u0646\\u0627\\u064a\\u0631','\\u0641\\u0628\\u0631\\u0627\\u064a\\u0631','\\u0645\\u0627\\u0631\\u0633','\\u0623\\u0628\\u0631\\u064a\\u0644','\\u0645\\u0627\\u064a\\u0648','\\u064a\\u0648\\u0646\\u064a\\u0648','\\u064a\\u0648\\u0644\\u064a\\u0648','\\u0623\\u063a\\u0633\\u0637\\u0633','\\u0633\\u0628\\u062a\\u0645\\u0628\\u0631','\\u0623\\u0643\\u062a\\u0648\\u0628\\u0631','\\u0646\\u0648\\u0641\\u0645\\u0628\\u0631','\\u062f\\u064a\\u0633\\u0645\\u0628\\u0631'];\n\nfunction readable(d) {\n  const e = toEgy(d);\n  const hh = String(e.getUTCHours()).padStart(2, '0');\n  const mm = String(e.getUTCMinutes()).padStart(2, '0');\n  return AR_DAYS[e.getUTCDay()] + ' ' + e.getUTCDate() + ' ' + AR_MON[e.getUTCMonth()] + ' \\u0627\\u0644\\u0633\\u0627\\u0639\\u0629 ' + hh + ':' + mm;\n}\n\nconst slots = [];\nconst usedDays = new Set();\n\nfor (let day = 1; day <= 21 && slots.length < 3; day++) {\n  const d = new Date(now.getTime() + day * 86400000);\n  const wd = toEgy(d).getUTCDay();\n  if (wd === 5 || wd === 6) continue;\n\n  const ds = egyDate(d);\n  if (usedDays.has(ds)) continue;\n\n  let cur = new Date(`${ds}T${String(WORK_START - 3).padStart(2, '0')}:00:00Z`);\n  const wEnd = new Date(`${ds}T${String(WORK_END - 3).padStart(2, '0')}:00:00Z`);\n\n  while (cur < wEnd) {\n    const iEnd = new Date(cur.getTime() + DUR * 60000);\n    const bEnd = new Date(cur.getTime() + TOTAL * 60000);\n\n    if (iEnd > wEnd) break;\n    if (cur <= now) { cur = bEnd; continue; }\n    if ([...offeredSlots].some(s => sameInstant(s, cur.toISOString()))) { cur = bEnd; continue; }\n\n    let ok = true;\n    for (const item of allBlocked) {\n      const ev = item.json;\n      if (!ev?.start || !ev?.end) continue;\n      const es = getTime(ev.start);\n      const eeBase = getTime(ev.end);\n      if (!es || !eeBase) continue;\n      const ee = new Date(eeBase.getTime() + BUF * 60000);\n      if (cur < ee && bEnd > es) { ok = false; break; }\n    }\n\n    if (ok) {\n      slots.push({ start: cur.toISOString(), end: iEnd.toISOString(), readable: readable(cur) });\n      usedDays.add(ds);\n      break;\n    }\n\n    cur = bEnd;\n  }\n}\n\nreturn [{ json: { slots } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2368,
+        2032
+      ],
+      "name": "Find 3 Slots (Web Reschedule)",
+      "id": "f6f2f75a-c9bf-4313-b879-43e0aacaad28"
+    },
+    {
+      "parameters": {
+        "jsCode": "const slots = $input.first().json.slots || [];\nconst token = $('Get Candidate (Web Reschedule)').item.json.fields.portal_token;\nconst name = $('Get Candidate (Web Reschedule)').item.json.fields.name || 'Candidate';\nconst candId = $('Get Candidate (Web Reschedule)').item.json.fields.candidate_id;\nconst ngrok = 'https://YOUR_N8N_PUBLIC_URL';\nconst base = ngrok + '/webhook/candidate-select-slot';\nconst hrAction = ngrok + '/webhook/hr-action';\n\nconst slotsHtml = slots.length > 0\n  ? slots.map(s => `<a href='${base}?token=${encodeURIComponent(token)}&start=${encodeURIComponent(s.start)}&end=${encodeURIComponent(s.end)}&readable=${encodeURIComponent(s.readable)}' style='display:block;background:white;border:2px solid #e5e7eb;border-radius:10px;padding:18px 20px;margin-bottom:12px;text-decoration:none;color:#111827;'><div style='font-size:0.75rem;color:#2563eb;font-weight:700;margin-bottom:4px;letter-spacing:0.05em;'>AVAILABLE SLOT</div><div style='font-size:1.05rem;font-weight:600;'>${s.readable}</div><div style='font-size:0.8rem;color:#6b7280;margin-top:4px;'>Click to confirm this slot -></div></a>`).join('')\n  : `<div style='background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:16px;text-align:center;color:#92400e;'>No available slots found for the next 14 days. HR will contact you directly.</div>`;\n\nconst suggestHtml = `\n  <div id=\"suggest-section\" style=\"margin-top:24px;border-top:1px solid #e5e7eb;padding-top:24px;text-align:right;\">\n    <h2 style=\"font-size:1.1rem;color:#111827;margin-bottom:12px;text-align:center;\">Need another time?</h2>\n    <input id=\"suggestion-input\" type=\"datetime-local\" style=\"width:100%;padding:12px;border:1px solid #d1d5db;border-radius:8px;font-family:inherit;margin-bottom:12px;\">\n    <button id=\"suggestion-submit\" onclick=\"submitSuggestion()\" style=\"width:100%;background:#2563eb;color:white;padding:12px;border:none;border-radius:8px;font-size:1rem;font-weight:bold;cursor:pointer;\">\n      Send suggestion\n    </button>\n    <p id=\"suggestion-message\" style=\"margin-top:12px;font-size:0.9rem;text-align:center;\"></p>\n  </div>\n  <script>\n    async function submitSuggestion() {\n      const input = document.getElementById('suggestion-input');\n      const btn = document.getElementById('suggestion-submit');\n      const msg = document.getElementById('suggestion-message');\n      const text = input.value.trim();\n      if (!text) {\n        msg.style.color = '#dc2626';\n        msg.innerText = 'Please choose a date and time.';\n        return;\n      }\n      btn.disabled = true;\n      btn.innerText = 'Sending...';\n      msg.innerText = '';\n      try {\n        const res = await fetch('${hrAction}', {\n          method: 'POST',\n          headers: { 'Content-Type': 'application/json' },\n          body: JSON.stringify({\n            action: 'suggest',\n            candidate_id: '${candId}',\n            suggestion_text: text\n          })\n        });\n        if (!res.ok) throw new Error('Request failed');\n        document.getElementById('suggest-section').innerHTML = '<div style=\"background:#ecfdf5;border:1px solid #a7f3d0;color:#047857;border-radius:8px;padding:16px;text-align:center;font-weight:bold;\">Your suggestion was sent successfully. HR will review it.</div>';\n      } catch (e) {\n        msg.style.color = '#dc2626';\n        msg.innerText = 'Something went wrong. Please try again.';\n        btn.disabled = false;\n        btn.innerText = 'Send suggestion';\n      }\n    }\n  </script>`;\n\nconst html = `<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Choose a New Time</title><style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Arial,sans-serif;background:#eff6ff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}.card{background:white;border-radius:16px;padding:40px;max-width:500px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.1);}</style></head><body><div class='card'><div style='text-align:center;margin-bottom:24px;'><div style='font-size:3rem;margin-bottom:12px;'>&#128197;</div><h1 style='font-size:1.5rem;font-weight:700;color:#1d4ed8;margin-bottom:8px;'>Choose a New Time</h1><p style='color:#6b7280;font-size:0.95rem;'>Hi <strong>${name}</strong>, please select a slot that works for you:</p></div>${slotsHtml}${suggestHtml}</div></body></html>`;\n\nreturn [{ json: { html } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2144,
+        2032
+      ],
+      "name": "Build Reschedule HTML",
+      "id": "93773037-2199-4e69-9562-3da06006759f"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $('Build Reschedule HTML').item.json.html }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              },
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1568,
+        2016
+      ],
+      "name": "Respond: Reschedule Slots HTML",
+      "id": "cd21a559-fef0-4cf7-8ff0-f13d05700ddb"
+    },
+    {
+      "parameters": {
+        "path": "176e3366-9122-4f72-a2b7-83ec6bd834b2",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -3680,
+        2416
+      ],
+      "name": "Candidate Select Slot Webhook",
+      "id": "92947c91-35da-4b4f-999c-2e5a429e18dd",
+      "webhookId": "176e3366-9122-4f72-a2b7-83ec6bd834b2"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "filterByFormula": "={portal_token} = '{{ $json.query.token }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -3456,
+        2416
+      ],
+      "name": "Get Candidate (Web Select)",
+      "id": "98042d8e-060d-4a10-a020-c48ea96bc9f9"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Get Candidate (Web Select)').item.json.id }}",
+            "status": "Pending Reschedule",
+            "proposed_interview_date": "={{ $('Candidate Select Slot Webhook').item.json.query.start }}",
+            "proposed_interview_end": "={{ $('Candidate Select Slot Webhook').item.json.query.end }}",
+            "suggested_datetime": ""
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "proposed_interview_date",
+              "displayName": "proposed_interview_date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "proposed_interview_end",
+              "displayName": "proposed_interview_end",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "suggested_datetime",
+              "displayName": "suggested_datetime",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -1728,
+        2352
+      ],
+      "name": "Save Selected Slot (Web)",
+      "id": "9e5cf3b4-2ac1-4bc5-a707-4bc9fe21c76d"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9425c047-9563-46ec-b333-42f994116bd4",
+              "leftValue": "={{ $json.fields.calendar_event_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1024,
+        864
+      ],
+      "name": "If",
+      "id": "4630e29a-1d37-4783-bbe2-e7c591d3e55f"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME",
+          "cachedResultUrl": "https://airtable.com/AIRTABLE_BASE_ID"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates",
+          "cachedResultUrl": "https://airtable.com/AIRTABLE_BASE_ID/AIRTABLE_CANDIDATES_TABLE_ID"
+        },
+        "filterByFormula": "=AND(\n  RECORD_ID() != '{{ $('Get Candidate (Reschedule)').item.json.id }}',\n  NOT({proposed_interview_date} = ''),\n  OR(\n    {status} = 'Pending Reschedule',\n    {status} = 'Interview Proposed',\n    {status} = 'Pending Confirmation',\n    {status} = 'Interview Scheduled'\n  )\n)",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -128,
+        1296
+      ],
+      "name": "Search records",
+      "alwaysOutputData": true,
+      "id": "bb9b4096-5dc2-4bdc-9130-8a419e40a6d1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c0143f03-f52a-4ecf-af8e-300654873f02",
+              "leftValue": "={{ $json.slots.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        368,
+        1312
+      ],
+      "name": "If2",
+      "id": "284e0ea2-1335-407d-8ceb-29f1fdd49996"
+    },
+    {
+      "parameters": {
+        "chatId": "1935144707",
+        "text": "=⚠️ No interview slots available  👤 {{ $('Get Candidate (Reschedule)').item.json.fields.name }}  📧 {{ $('Get Candidate (Reschedule)').item.json.fields.email }}  Candidate requested reschedule but no free slots were found in the next 14 days.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        624,
+        1424
+      ],
+      "name": "Send a text message",
+      "id": "ccc2fcb4-1fcc-4510-863d-e621686153b8",
+      "webhookId": "d4453e21-fff9-438d-92e6-ee02412feab3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';\nlet token = '';\nfor (let i = 0; i < 32; i++) token += chars[Math.floor(Math.random() * chars.length)];\nreturn [{ json: { token } }];"
+      },
+      "name": "Generate Token (Manual)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        64,
+        1712
+      ],
+      "id": "8dd653cc-0029-4b5f-a598-9e644eae3563"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Get Candidate (Manual)').item.json.id }}",
+            "portal_token": "={{ $('Generate Token (Manual)').item.json.token }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "portal_token",
+              "displayName": "portal_token",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "name": "Save Token (Manual)",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        352,
+        1712
+      ],
+      "id": "7e7492ab-451d-4153-9ce5-a325eb5f8b3e"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "918d6e4b-0170-4e06-8265-f8c9a3137b9d",
+              "leftValue": "={{ $json.fields.status }}",
+              "rightValue": "Interview Scheduled",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2816,
+        1520
+      ],
+      "name": "If5",
+      "id": "91d4c300-35ee-4c34-b162-bb32612e4ad3"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={ \"status\": \"already_processed\", \"message\": \"This link has already been used.\" }",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              },
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -2640,
+        1712
+      ],
+      "name": "Respond: Confirmed Page1",
+      "id": "e4b4fb8c-fde4-4b82-9cd3-d6433c1c3e90"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME",
+          "cachedResultUrl": "https://airtable.com/AIRTABLE_BASE_ID"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates",
+          "cachedResultUrl": "https://airtable.com/AIRTABLE_BASE_ID/AIRTABLE_CANDIDATES_TABLE_ID"
+        },
+        "filterByFormula": "=AND(\n  RECORD_ID() != '{{ $('Get Candidate (Web Reschedule)').item.json.id }}',\n  OR(\n    NOT({proposed_interview_date} = ''),\n    NOT({interview_date} = '')\n  ),\n  OR(\n    {status} = 'Pending Reschedule',\n    {status} = 'Interview Proposed',\n    {status} = 'Pending Confirmation',\n    {status} = 'Interview Scheduled',\n    {status} = 'Interview Confirmed'\n  )\n)",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -2640,
+        2032
+      ],
+      "name": "Get Proposed Dates (Web)",
+      "alwaysOutputData": true,
+      "id": "77ce8447-6b9d-4ec2-9e90-f9bacdcd8115"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!DOCTYPE html>\n<html>\n<body style=\"font-family:Arial;background:#eff6ff;display:flex;align-items:center;justify-content:center;min-height:100vh;\">\n  <div style=\"background:white;border-radius:16px;padding:48px;text-align:center;max-width:420px;\">\n    <div style=\"font-size:3rem;\">📅</div>\n    <h1 style=\"color:#1d4ed8;margin:16px 0;\">تم استلام طلبك!</h1>\n    <p style=\"color:#6b7280;\">اخترت الوقت بنجاح. HR هيراجع ويأكدلك في أقرب وقت.</p>\n  </div>\n</body>\n</html>",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1456,
+        2448
+      ],
+      "name": "Respond: HR Approved Page1",
+      "id": "523f7a1c-47a2-4428-9989-ffde2cc6596e"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME",
+          "cachedResultUrl": "https://airtable.com/AIRTABLE_BASE_ID"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates",
+          "cachedResultUrl": "https://airtable.com/AIRTABLE_BASE_ID/AIRTABLE_CANDIDATES_TABLE_ID"
+        },
+        "filterByFormula": "=AND(\n  NOT({proposed_interview_date} = ''),\n  {status} != 'Interview Scheduled'\n)",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -800,
+        128
+      ],
+      "name": "Get Proposed Dates (Accept)",
+      "alwaysOutputData": true,
+      "id": "1dd7d4eb-9e3c-4ebd-ba90-80df6a7f5a9c"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_CALENDAR_ID@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "N8N"
+        },
+        "returnAll": true,
+        "timeMax": "={{ $now.plus(14, 'days') }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "Africa/Cairo",
+            "mode": "list",
+            "cachedResultName": "Africa/Cairo"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -784,
+        400
+      ],
+      "name": "Check Slot Conflict (Auto)1",
+      "alwaysOutputData": true,
+      "id": "ed8a9961-2a4a-41f8-8d0f-c23a0f63c328"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_CALENDAR_ID@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "N8N"
+        },
+        "returnAll": true,
+        "timeMax": "={{ $now.plus(14, 'days') }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "Africa/Cairo",
+            "mode": "list",
+            "cachedResultName": "Africa/Cairo"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -352,
+        1808
+      ],
+      "name": "Get Calendar (Manual)",
+      "alwaysOutputData": true,
+      "id": "1fd70945-1eea-4de5-bbc3-afdc03c5f141"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_CALENDAR_ID@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "N8N"
+        },
+        "returnAll": true,
+        "timeMax": "={{ $now.plus(14, 'days') }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "Africa/Cairo",
+            "mode": "list",
+            "cachedResultName": "Africa/Cairo"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -608,
+        128
+      ],
+      "name": "Get Calendar (Manual)1",
+      "alwaysOutputData": true,
+      "id": "e926a5f4-e11f-486c-8351-ab6338aefbd4"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Get Candidate (Web Reschedule)').item.json.id }}",
+            "offered_slots": "={{\n  [\n    $('Get Candidate (Web Reschedule)').item.json.fields.offered_slots,\n    ...($('Find 3 Slots (Web Reschedule)').item.json.slots || []).map(s => s.start)\n  ]\n    .filter(Boolean)\n    .join(',')\n}}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "candidate_id",
+              "displayName": "candidate_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "job_id",
+              "displayName": "job_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "cv_link",
+              "displayName": "cv_link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "hr_notes",
+              "displayName": "hr_notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "submitted_at",
+              "displayName": "submitted_at",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "interview_date",
+              "displayName": "interview_date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "pending_interview_chat_id",
+              "displayName": "pending_interview_chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "proposed_interview_date",
+              "displayName": "proposed_interview_date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "proposed_interview_end",
+              "displayName": "proposed_interview_end",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "calendar_event_id",
+              "displayName": "calendar_event_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "portal_token",
+              "displayName": "portal_token",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "pre_interview_status",
+              "displayName": "pre_interview_status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Jobs",
+              "displayName": "Jobs",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "CV_Analysis",
+              "displayName": "CV_Analysis",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email_Log",
+              "displayName": "Email_Log",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "offered_slots",
+              "displayName": "offered_slots",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -1856,
+        2032
+      ],
+      "name": "Save Offered Slots (Web)",
+      "id": "51c8c46b-1f0a-40ae-b393-e459ecf28c9b"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_CALENDAR_ID@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "N8N"
+        },
+        "returnAll": true,
+        "timeMax": "={{ $now.plus({ week:3 }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -3200,
+        2416
+      ],
+      "name": "Get Calendar (Web Select Conflict)",
+      "id": "3113a459-c1d9-4c7f-978a-7546e85ac7e0"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME",
+          "cachedResultUrl": "https://airtable.com/AIRTABLE_BASE_ID"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_CANDIDATES_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Candidates",
+          "cachedResultUrl": "https://airtable.com/AIRTABLE_BASE_ID/AIRTABLE_CANDIDATES_TABLE_ID"
+        },
+        "filterByFormula": "=AND(\n  RECORD_ID() != '{{ $('Get Candidate (Web Select)').item.json.id }}',\n  OR(\n    NOT({proposed_interview_date} = ''),\n    NOT({interview_date} = '')\n  ),\n  OR(\n    {status} = 'Pending Reschedule',\n    {status} = 'Interview Proposed',\n    {status} = 'Pending Confirmation',\n    {status} = 'Interview Scheduled',\n    {status} = 'Interview Confirmed'\n  )\n)",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -2848,
+        2400
+      ],
+      "name": "Get Proposed Dates (Web Select Conflict)",
+      "alwaysOutputData": true,
+      "id": "5b64daa3-786f-4f14-ac4f-d3a5ea293336"
+    },
+    {
+      "parameters": {
+        "jsCode": "const candidate = $('Get Candidate (Web Select)').item.json;\nconst fields = candidate.fields || {};\nconst q = $('Candidate Select Slot Webhook').item.json.query || {};\nconst start = q.start;\nconst end = q.end;\n\nfunction parseSlotList(value) {\n  if (!value) return [];\n  if (Array.isArray(value)) return value.map(String).filter(Boolean);\n  const text = String(value).trim();\n  if (!text) return [];\n  try {\n    const parsed = JSON.parse(text);\n    if (Array.isArray(parsed)) return parsed.map(item => typeof item === 'string' ? item : item?.start).filter(Boolean);\n  } catch (e) {}\n  return text.split(',').map(s => s.trim()).filter(Boolean);\n}\n\nfunction sameInstant(a, b) {\n  const da = new Date(a);\n  const db = new Date(b);\n  return !isNaN(da) && !isNaN(db) && da.getTime() === db.getTime();\n}\n\nfunction getTime(t) {\n  const d = new Date(t?.dateTime || t);\n  return isNaN(d.getTime()) ? null : d;\n}\n\nfunction fail(code, message) {\n  return [{ json: { valid: false, code, message } }];\n}\n\nconst selectedStart = new Date(start);\nconst selectedEnd = new Date(end);\nif (!start || !end || isNaN(selectedStart) || isNaN(selectedEnd) || selectedEnd <= selectedStart) {\n  return fail('invalid_slot', 'Invalid slot link. Please open the latest reschedule email and choose again.');\n}\n\nif (selectedStart <= new Date()) {\n  return fail('past_slot', 'This time has already passed. Please choose another slot.');\n}\n\nconst allowedStatuses = ['Interview Scheduled', 'Interview Confirmed'];\nif (!allowedStatuses.includes(fields.status)) {\n  return fail('invalid_status', 'This link can no longer be used. Please contact HR or use the latest email link.');\n}\n\nconst offeredSlots = parseSlotList(fields.offered_slots);\nif (!offeredSlots.some(s => sameInstant(s, start))) {\n  return fail('not_offered', 'This slot is no longer available for your link. Please choose one of the latest offered slots.');\n}\n\nconst blocks = [];\nfor (const evItem of $('Get Calendar (Web Select Conflict)').all()) {\n  const ev = evItem.json || {};\n  if (ev.start && ev.end) blocks.push({ start: ev.start, end: ev.end });\n}\nfor (const rec of $('Get Proposed Dates (Web Select Conflict)').all()) {\n  const f = rec.json?.fields || {};\n  if (f.proposed_interview_date) {\n    blocks.push({\n      start: { dateTime: f.proposed_interview_date },\n      end: { dateTime: f.proposed_interview_end || new Date(new Date(f.proposed_interview_date).getTime() + 60 * 60000).toISOString() }\n    });\n  }\n  if (f.interview_date) {\n    blocks.push({\n      start: { dateTime: f.interview_date },\n      end: { dateTime: new Date(new Date(f.interview_date).getTime() + 60 * 60000).toISOString() }\n    });\n  }\n}\n\nconst BUFFER_MIN = 15;\nconst selectedBlockEnd = new Date(selectedEnd.getTime() + BUFFER_MIN * 60000);\nfor (const block of blocks) {\n  const bs = getTime(block.start);\n  const beBase = getTime(block.end);\n  if (!bs || !beBase) continue;\n  const be = new Date(beBase.getTime() + BUFFER_MIN * 60000);\n  if (selectedStart < be && selectedBlockEnd > bs) {\n    return fail('conflict', 'This time has just been booked. Please go back and choose another slot.');\n  }\n}\n\nreturn [{ json: { valid: true, start, end, readable: q.readable || '' } }];"
+      },
+      "name": "Validate Selected Slot (Web)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2384,
+        2384
+      ],
+      "id": "34bb71bc-28ac-4476-83e7-ab204bbb299e"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "selected-slot-valid-condition",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2160,
+        2384
+      ],
+      "name": "Selected Slot Valid? (Web)",
+      "id": "5f2307ae-0ea7-430b-b2bf-691bad6025c3"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!DOCTYPE html>\n<html>\n<head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"></head>\n<body style=\"font-family:Arial;background:#fff7ed;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px;\">\n  <div style=\"background:white;border-radius:16px;padding:40px;text-align:center;max-width:460px;border:1px solid #fed7aa;\">\n    <div style=\"font-size:3rem;\">!</div>\n    <h1 style=\"color:#c2410c;margin:16px 0;\">Slot unavailable</h1>\n    <p style=\"color:#6b7280;line-height:1.7;\">{{ $('Validate Selected Slot (Web)').item.json.message }}</p>\n    <a href=\"https://YOUR_N8N_PUBLIC_URL/webhook/candidate-reschedule?token={{ $('Candidate Select Slot Webhook').item.json.query.token }}\" style=\"display:inline-block;margin-top:18px;background:#111827;color:white;padding:12px 18px;border-radius:8px;text-decoration:none;font-weight:600;\">Choose another time</a>\n  </div>\n</body>\n</html>",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1984,
+        2592
+      ],
+      "name": "Respond: Selected Slot Invalid",
+      "id": "c3e88371-ede6-450b-8168-aaa3edb1acfb"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "web-reschedule-status-scheduled",
+              "leftValue": "={{ $json.fields.status }}",
+              "rightValue": "Interview Scheduled",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2944,
+        2032
+      ],
+      "name": "Reschedule Link Status OK?",
+      "id": "3fc925d2-2b17-47db-9cb0-b7b9cdc29d2e"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!DOCTYPE html>\n<html>\n<head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"></head>\n<body style=\"font-family:Arial;background:#fff7ed;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px;\">\n  <div style=\"background:white;border-radius:16px;padding:40px;text-align:center;max-width:460px;border:1px solid #fed7aa;\">\n    <div style=\"font-size:3rem;\">!</div>\n    <h1 style=\"color:#c2410c;margin:16px 0;\">Link unavailable</h1>\n    <p style=\"color:#6b7280;line-height:1.7;\">This reschedule link can no longer be used. Please use the latest email link or contact HR.</p>\n  </div>\n</body>\n</html>",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -2656,
+        2208
+      ],
+      "name": "Respond: Reschedule Link Unavailable",
+      "id": "f5496e8d-7576-472d-ac09-ecaf3ea26782"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HR Action Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Candidate Confirm Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get Candidate (Direct Confirm)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Candidate (Direct Confirm)": {
+      "main": [
+        [
+          {
+            "node": "If5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Status (Direct Confirm)": {
+      "main": [
+        [
+          {
+            "node": "Respond: Confirmed Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Candidate Reschedule Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get Candidate (Web Reschedule)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Body": {
+      "main": [
+        [
+          {
+            "node": "Action Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Action Router": {
+      "main": [
+        [
+          {
+            "node": "Get Candidate (Accept)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Candidate (Confirm Auto)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Candidate (Reject)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Candidate (Cancel)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Candidate (Reschedule)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [
+          {
+            "node": "Get Candidate (Manual)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Get Candidate (Accept)": {
+      "main": [
+        [
+          {
+            "node": "Get Calendar Slots (Accept)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Calendar Slots (Accept)": {
+      "main": [
+        [
+          {
+            "node": "Get Proposed Dates (Accept)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Next Slot (Accept)": {
+      "main": [
+        [
+          {
+            "node": "Slot Found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slot Found?": {
+      "main": [
+        [
+          {
+            "node": "Save Proposed Slot",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond: No Slot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Proposed Slot": {
+      "main": [
+        [
+          {
+            "node": "Respond: Slot Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Candidate (Confirm Auto)": {
+      "main": [
+        [
+          {
+            "node": "Get Job (Confirm Auto)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Job (Confirm Auto)": {
+      "main": [
+        [
+          {
+            "node": "Check Slot Conflict (Auto)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Calendar Event (Confirm Auto)": {
+      "main": [
+        [
+          {
+            "node": "Send Interview Invitation (Confirm Auto)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Interview Invitation (Confirm Auto)": {
+      "main": [
+        [
+          {
+            "node": "Update Candidate (Confirm Auto)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Candidate (Confirm Auto)": {
+      "main": [
+        [
+          {
+            "node": "Respond: Confirm Auto OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Candidate (Reject)": {
+      "main": [
+        [
+          {
+            "node": "Get Job (Reject)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Job (Reject)": {
+      "main": [
+        [
+          {
+            "node": "Update Candidate (Reject)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Rejection Email": {
+      "main": [
+        [
+          {
+            "node": "Respond: Reject OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Candidate (Reject)": {
+      "main": [
+        [
+          {
+            "node": "Send Rejection Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Candidate (Cancel)": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete Calendar Event": {
+      "main": [
+        [
+          {
+            "node": "Send Cancellation Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Cancellation Email": {
+      "main": [
+        [
+          {
+            "node": "Update Candidate (Cancel)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Candidate (Cancel)": {
+      "main": [
+        [
+          {
+            "node": "Respond: Cancel OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Candidate (Reschedule)": {
+      "main": [
+        [
+          {
+            "node": "Get Calendar (Reschedule)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Calendar (Reschedule)": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find 3 Available Slots": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Candidate (Reschedule)": {
+      "main": [
+        [
+          {
+            "node": "Respond: Reschedule Slots",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Candidate (Manual)": {
+      "main": [
+        [
+          {
+            "node": "Get Job (Manual)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Job (Manual)": {
+      "main": [
+        [
+          {
+            "node": "AI Parse Date (Manual)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Parse Date (Manual)": {
+      "main": [
+        [
+          {
+            "node": "Parse Date Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter (Manual)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Parse Date (Manual)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Date Output": {
+      "main": [
+        [
+          {
+            "node": "Get Calendar (Manual)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date Valid?": {
+      "main": [
+        [
+          {
+            "node": "Generate Token (Manual)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond: Unclear Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Calendar Event (Manual)": {
+      "main": [
+        [
+          {
+            "node": "Send Interview Invitation (Manual)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Interview Invitation (Manual)": {
+      "main": [
+        [
+          {
+            "node": "Update Candidate (Manual)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Candidate (Manual)": {
+      "main": [
+        [
+          {
+            "node": "Respond: Manual OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Token (Auto)": {
+      "main": [
+        [
+          {
+            "node": "Save Token (Auto)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Token (Auto)": {
+      "main": [
+        [
+          {
+            "node": "Create Calendar Event (Confirm Auto)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Proposed Slot? (Auto)": {
+      "main": [
+        [
+          {
+            "node": "Generate Token (Auto)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond: No Proposed Slot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Candidate (Web Reschedule)": {
+      "main": [
+        [
+          {
+            "node": "Reschedule Link Status OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Calendar (Web Reschedule)": {
+      "main": [
+        [
+          {
+            "node": "Get Proposed Dates (Web)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find 3 Slots (Web Reschedule)": {
+      "main": [
+        [
+          {
+            "node": "Build Reschedule HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Reschedule HTML": {
+      "main": [
+        [
+          {
+            "node": "Save Offered Slots (Web)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Candidate Select Slot Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get Candidate (Web Select)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Candidate (Web Select)": {
+      "main": [
+        [
+          {
+            "node": "Get Calendar (Web Select Conflict)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Delete Calendar Event",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Cancellation Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "Find 3 Available Slots",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Update Candidate (Reschedule)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        []
+      ]
+    },
+    "Generate Token (Manual)": {
+      "main": [
+        [
+          {
+            "node": "Save Token (Manual)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Token (Manual)": {
+      "main": [
+        [
+          {
+            "node": "Create Calendar Event (Manual)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If5": {
+      "main": [
+        [
+          {
+            "node": "Update Status (Direct Confirm)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond: Confirmed Page1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Proposed Dates (Web)": {
+      "main": [
+        [
+          {
+            "node": "Find 3 Slots (Web Reschedule)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Selected Slot (Web)": {
+      "main": [
+        [
+          {
+            "node": "Respond: HR Approved Page1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Proposed Dates (Accept)": {
+      "main": [
+        [
+          {
+            "node": "Get Calendar (Manual)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Slot Conflict (Auto)1": {
+      "main": [
+        [
+          {
+            "node": "Has Proposed Slot? (Auto)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Calendar (Manual)": {
+      "main": [
+        [
+          {
+            "node": "Date Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Calendar (Manual)1": {
+      "main": [
+        [
+          {
+            "node": "Find Next Slot (Accept)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Offered Slots (Web)": {
+      "main": [
+        [
+          {
+            "node": "Respond: Reschedule Slots HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Calendar (Web Select Conflict)": {
+      "main": [
+        [
+          {
+            "node": "Get Proposed Dates (Web Select Conflict)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Proposed Dates (Web Select Conflict)": {
+      "main": [
+        [
+          {
+            "node": "Validate Selected Slot (Web)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Selected Slot (Web)": {
+      "main": [
+        [
+          {
+            "node": "Selected Slot Valid? (Web)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Selected Slot Valid? (Web)": {
+      "main": [
+        [
+          {
+            "node": "Save Selected Slot (Web)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond: Selected Slot Invalid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reschedule Link Status OK?": {
+      "main": [
+        [
+          {
+            "node": "Get Calendar (Web Reschedule)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond: Reschedule Link Unavailable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "424811f0-9d42-405c-875b-e823b2452bd4",
+  "meta": {
+    "instanceId": "fede2b4b432858cb57ae0573f0e5769001ae7736eccbb8fe8130e5b76a41312e"
+  },
+  "id": "uTuwx1dcr7TqnpFB",
+  "tags": []
+}

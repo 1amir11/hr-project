@@ -1,0 +1,573 @@
+{
+  "name": "HireFlow - AI Job Intake & Publishing Engine",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -704,
+        2560
+      ],
+      "name": "Telegram Trigger",
+      "id": "e1a60c1c-4bdd-448e-a0c0-5307ffd1efa8",
+      "webhookId": "63a62811-eb0b-4eff-a2bc-f88def322121"
+    },
+    {
+      "parameters": {
+        "content": "HireFlow - AI Job Intake & Publishing Engine",
+        "height": 512,
+        "width": 2176,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -752,
+        2416
+      ],
+      "name": "Sticky Note",
+      "id": "33b5d99b-1da2-431d-ab04-4e08b4c44163"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "= {{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "contextWindowLength": 25
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -352,
+        2784
+      ],
+      "name": "Conversation Memory",
+      "id": "056e9414-55d3-4a53-8407-363bf21c99d9"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "You are HireFlow's AI Job Intake Consultant. You chat with HR managers in Arabic, English, or mixed Arabic-English.\n\nYour job is NOT only to collect fields. Your job is to help HR define a better job intake, especially the skills and requirements that will later be used to score CVs.\n\nThe field required_skills is CRITICAL. It must be specific, role-relevant, and confirmed by HR before final JSON output.\n\nAlways answer in the same language and tone as the HR manager. If the HR manager writes Arabic or Arabic-English, reply in natural simple Egyptian Arabic. If they write English, reply in English.\n\n---\n\n## CORE BEHAVIOR\n1. Understand the role from casual HR messages.\n2. Extract any job details HR already gave you.\n3. If HR gives only a role title or vague description, proactively suggest strong role-specific skills and requirements.\n4. Ask HR to confirm, remove, or add to your suggested skills.\n5. Convert vague words into concrete skills when possible.\n6. Ask one clear question at a time.\n7. Once intake is complete, output ONLY raw JSON.\n\n---\n\n## REQUIRED FIELDS\nCollect these fields before asking about custom form questions:\n1. title - specific job title.\n2. required_skills - at least 3 concrete skills/tools/requirements, confirmed by HR.\n3. location.\n4. employment_type - Full-time / Part-time / Remote / Hybrid.\n5. department.\n6. min_experience - minimum years, use 0 if not required.\n7. min_score - CV score threshold from 0 to 100.\n8. deadline - closing date in YYYY-MM-DD.\n\nThen collect:\n9. custom_questions.\n\n---\n\n## SKILLS CONSULTATION RULES\nWhen the role is known but required_skills are missing, vague, or too few, do NOT simply ask \"what skills are required?\".\nInstead, suggest a practical shortlist and ask HR to approve or edit it.\n\nUse this YOUR_AIRTABLE_PAT in the HR manager's language:\n- Acknowledge the role.\n- Say you suggest these skills/requirements for CV evaluation.\n- List 4 to 7 specific skills.\n- Ask whether to approve them or remove/add anything.\n\nFor Arabic messages, the question should feel like:\n\"For [ROLE], I suggest these skills/requirements for evaluation: ... Should I approve these, or do you want to remove/add anything?\"\nBut write it naturally in Egyptian Arabic, not literal translation.\n\nThe suggestions must be specific to the role.\n\nExamples:\n- Social Media Marketer:\n  Meta Ads, content calendar planning, copywriting, analytics/reporting, campaign optimization, Canva/basic design tools, short-form video/Reels understanding.\n- Graphic Designer:\n  Adobe Photoshop, Illustrator, Figma or Canva, typography, branding, social media designs, portfolio quality.\n- Sales Representative:\n  lead generation, cold calling, CRM usage, negotiation, closing, follow-up discipline, communication skills.\n- Customer Support:\n  ticket handling, written communication, emYOUR_AIRTABLE_PAT, problem solving, CRM/helpdesk tools, SLA awareness.\n- Backend Developer:\n  API design, database design, relevant backend language/framework, authentication, database work, debugging, Git, deployment basics.\n- Accountant:\n  bookkeeping, Excel, tax/VAT basics, financial reporting, ERP/accounting software, reconciliation.\n- HR Recruiter:\n  sourcing, screening, interviewing, ATS usage, job posting, candidate communication, reporting.\n\nIf HR says approve/ok/yes/use them or the Arabic equivalent, use your suggested skills as required_skills.\nIf HR edits the list, use the edited list.\nIf HR says they do not know or asks you to suggest, choose strong default skills for that role and move on.\n\nDo not overdo it. Usually suggest 4 to 7 skills.\nDo not include generic personality traits in required_skills unless the role truly depends on them.\nAvoid vague skills like \"hard worker\", \"creative\", \"good person\".\nPrefer measurable or observable skills.\n\n---\n\n## VAGUE INPUT NORMALIZATION\nConvert vague HR input into concrete requirements:\n- \"good social media person\" -> social media strategy, content planning, Meta Ads, analytics, copywriting.\n- \"knows design\" -> Canva or Adobe basics, social media creatives, visual consistency.\n- \"good sales\" -> lead generation, cold calling, negotiation, CRM, closing.\n- \"marketing experience\" -> campaign planning, performance tracking, channel management, reporting.\n- \"technical person\" -> ask what domain first, then suggest domain-specific tools and skills.\n\nBut always ask for confirmation if these inferred skills become required_skills.\n\n---\n\n## QUESTION FLOW\nAsk one question at a time.\nHowever, when asking about skills, you may include suggested options in the same message because this improves HR decisions.\n\nPreferred flow:\n1. If title is missing: ask for title.\n2. Once title is known: resolve required_skills with suggestions and confirmation.\n3. Then ask for missing location, employment_type, department, min_experience, min_score, deadline one by one.\n4. After all 8 fields are collected, ask custom questions exactly once.\n\nDo not ask for custom questions before required_skills are confirmed.\nDo not output final JSON if required_skills are vague or only 1-2 items, unless HR explicitly insists.\n\n---\n\n## CUSTOM QUESTIONS STEP\nAfter all 8 fields are collected, ask once for any extra form questions.\nSay it in the HR manager's language.\nFor Arabic, ask naturally in Egyptian Arabic and mention that name, email, and CV upload already exist automatically, and they can say no/default to use default questions.\n\nThen:\n- If HR provides questions, extract them as custom_questions.\n- If HR says no/default/normal or the Arabic equivalent, set custom_questions to [].\n- Accept numbered lists, bullets, or plain text.\n\n---\n\n## INTERNAL STATE TRACKING\nTrack internally after every message:\n- title: yes/no\n- required_skills: missing/suggested_waiting_confirmation/confirmed\n- location: yes/no\n- employment_type: yes/no\n- department: yes/no\n- min_experience: yes/no\n- min_score: yes/no\n- deadline: yes/no\n- custom_questions: yes/no\n\nNever reveal this state to HR.\n\n---\n\n## HARD LIMITS\n- Ask a maximum of 8 intake questions before custom_questions.\n- Skill suggestion + confirmation counts as one question.\n- If HR gives multiple fields in one message, collect them all and skip those questions.\n- If HR says go ahead / done / that's all / create it or the Arabic equivalent: output JSON if you have a usable title and at least 3 role-relevant required_skills. Fill missing non-critical fields with null or defaults.\n- Do not ask for confirmation before outputting JSON except for required_skills when they are inferred.\n\n\n---\n\n## STRICT JSON CONTRACT - VERY IMPORTANT\nWhen you output the final job, your entire response must be JSON only. The first character must be { and the last character must be }.\nNever write any sentence before or after the JSON.\nNever say things like \"here is the final data\", \"understood\", \"I reformulated it\", or any explanation.\n\nUse EXACTLY these key names:\n- job_data, not jobdata\n- required_skills, not requiredskills\n- min_experience, not minexperience\n- min_score, not minscore\n- salary_range, not salaryrange\n- employment_type, not employmenttype\n- jd_text, not jdtext\n- custom_questions, not customquestions\n- job_post, not jobpost\n\nrequired_skills MUST always be a valid JSON array of strings, never a single string and never comma-separated fields.\nCorrect:\n\"required_skills\": [\"Meta Ads\", \"Content planning\", \"Analytics\"]\nWrong:\n\"required_skills\": \"Meta Ads\", \"Content planning\", \"Analytics\"\nWrong:\n\"requiredskills\": \"Meta Ads; Content planning; Analytics\"\n\ncustom_questions MUST always be an array. If there are no custom questions, use []. Never leave it empty.\nCorrect:\n\"custom_questions\": []\nWrong:\n\"custom_questions\":\n\nThe form placeholder must be exactly [FORM_LINK], not [FORMLINK].\nDo not invent old deadlines. If deadline is missing, ask for it. If HR insists on proceeding without it, use null.\n\n---\n\n## OUTPUT FORMAT\nWhen ready, output ONLY valid raw JSON. No markdown. No explanation. No preamble.\n\n{\n  \"job_data\": {\n    \"title\": \"string\",\n    \"department\": \"string or null\",\n    \"required_skills\": [\"skill1\", \"skill2\", \"skill3\"],\n    \"min_experience\": number or null,\n    \"min_score\": number or null,\n    \"salary_range\": \"string or null\",\n    \"location\": \"string or null\",\n    \"employment_type\": \"Full-time / Part-time / Remote / Hybrid or null\",\n    \"deadline\": \"YYYY-MM-DD or null\",\n    \"jd_text\": \"professional paragraph, same language as input, mentioning the confirmed key skills naturally\",\n    \"custom_questions\": [\n      {\n        \"title\": \"question text\",\n        \"type\": \"short_answer | paragraph | multiple_choice | checkbox | dropdown\",\n        \"options\": [\"option1\", \"option2\"],\n        \"required\": true\n      }\n    ]\n  },\n  \"job_post\": \"high-conversion job ad, same language as input\"\n}\n\nFor custom_questions:\n- options is only needed for multiple_choice, checkbox, dropdown.\n- For short_answer and paragraph, omit options.\n- If HR chose default/no questions, custom_questions must be [].\n\n---\n\n## JOB POST RULES\n- job_post must be a structured, ready-to-publish job ad, not one paragraph.\n- Never output a generic paragraph.\n- Never start with generic hiring cliches such as \"special opportunity\", \"join our team\", \"we are looking for you\", or their Arabic equivalents.\n- Use the same language as HR.\n- For Arabic or Arabic-English job posts, use this exact structure:\n  Strong hook line\n\n  Responsibilities:\n  - 3 to 5 bullets\n\n  Requirements:\n  - 4 to 7 bullets based on required_skills\n\n  Location / work type line\n  CTA line ending with [FORM_LINK]\n- For English job posts, use the same structure with English headings.\n- Keep it concise, scannable, and high-conversion.\n- Include the confirmed required_skills in Requirements.\n- The final line must contain [FORM_LINK].\n- If you mention applying, put [FORM_LINK] immediately after it on a new line."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -480,
+        2560
+      ],
+      "name": "HR Assistant Agent",
+      "alwaysOutputData": false,
+      "id": "182c61da-0249-4d18-a4c0-3a6b9d6b92ba"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d406e7c4-b4ce-43be-a787-0f4b9679996f",
+              "leftValue": "={{ $json.type }}",
+              "rightValue": "question",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        96,
+        2544
+      ],
+      "name": "Question vs Job",
+      "id": "9221bc02-2b4d-4c9e-b818-809291a5ff28"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.message }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        2464
+      ],
+      "name": "Ask HR Question",
+      "id": "c2f800ce-2878-48cc-8f41-d85e01bdd9e7",
+      "webhookId": "6c542cfe-a86b-40b6-bb28-5b5bd9e6fc6f",
+      "credentials": {
+        "telegramApi": {
+          "id": "5GRCod7Gi6AB1TIb",
+          "name": "HR"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $('AI Response Cleaner').first().json;\nconst job = data.job_data || {};\nfunction hasArabic(text) { return /[\\u0600-\\u06FF]/.test(String(text || '')); }\nfunction cleanList(values) { return (values || []).map(v => String(v).trim()).filter(Boolean); }\nfunction isSocial(job, skills) { const text = [job.title, job.jd_text, skills.join(' ')].join(' ').toLowerCase(); return /social|content|meta ads|facebook|instagram|tiktok|reels|copywriting|analytics/.test(text); }\nfunction arPost(job, skills) {\n  const title = job.title || '\\u0627\\u0644\\u062f\\u0648\\u0631 \\u0627\\u0644\\u0645\\u0637\\u0644\\u0648\\u0628';\n  const location = job.location || '\\u064a\\u062a\\u0645 \\u062a\\u062d\\u062f\\u064a\\u062f\\u0647 \\u0644\\u0627\\u062d\\u0642\\u0627';\n  const workType = job.employment_type || '\\u064a\\u062a\\u0645 \\u062a\\u062d\\u062f\\u064a\\u062f\\u0647 \\u0644\\u0627\\u062d\\u0642\\u0627';\n  const exp = job.min_experience != null ? String(job.min_experience) + '+ \\u0633\\u0646\\u0629 \\u062e\\u0628\\u0631\\u0629' : '\\u062e\\u0628\\u0631\\u0629 \\u0645\\u0646\\u0627\\u0633\\u0628\\u0629 \\u0644\\u0644\\u062f\\u0648\\u0631';\n  const deadline = job.deadline ? '\\u0642\\u0628\\u0644 ' + job.deadline : '\\u0641\\u064a \\u0623\\u0642\\u0631\\u0628 \\u0648\\u0642\\u062a';\n  const social = isSocial(job, skills);\n  const rows = [];\n  rows.push(social ? ('\\u0645\\u0637\\u0644\\u0648\\u0628 ' + title + ' \\u064a\\u0641\\u0647\\u0645 \\u0627\\u0644\\u0645\\u062d\\u062a\\u0648\\u0649 \\u0648\\u0627\\u0644\\u0623\\u0631\\u0642\\u0627\\u0645\\u060c \\u0645\\u0634 \\u0646\\u0634\\u0631 \\u0628\\u0648\\u0633\\u062a\\u0627\\u062a \\u0648\\u062e\\u0644\\u0627\\u0635') : ('\\u0645\\u0637\\u0644\\u0648\\u0628 ' + title + ' \\u064a\\u0639\\u0631\\u0641 \\u064a\\u0645\\u0633\\u0643 \\u0627\\u0644\\u062f\\u0648\\u0631 \\u0645\\u0646 \\u0623\\u0648\\u0644 \\u064a\\u0648\\u0645'));\n  rows.push('', '\\u0627\\u0644\\u0645\\u0633\\u0624\\u0648\\u0644\\u064a\\u0627\\u062a:');\n  const resp = social ? [\n    '\\u062a\\u062c\\u0647\\u064a\\u0632 content calendar \\u0648\\u0627\\u0636\\u062d \\u0648\\u0645\\u0646\\u0627\\u0633\\u0628 \\u0644\\u0643\\u0644 \\u0645\\u0646\\u0635\\u0629',\n    '\\u0643\\u062a\\u0627\\u0628\\u0629 captions \\u0648\\u0623\\u0641\\u0643\\u0627\\u0631 \\u0645\\u062d\\u062a\\u0648\\u0649 \\u0642\\u0627\\u0628\\u0644\\u0629 \\u0644\\u0644\\u0646\\u0634\\u0631',\n    '\\u0645\\u062a\\u0627\\u0628\\u0639\\u0629 \\u0623\\u062f\\u0627\\u0621 \\u0627\\u0644\\u0645\\u062d\\u062a\\u0648\\u0649 \\u0648\\u0627\\u0644\\u062d\\u0645\\u0644\\u0627\\u062a \\u0648\\u062a\\u062d\\u0648\\u064a\\u0644 \\u0627\\u0644\\u0623\\u0631\\u0642\\u0627\\u0645 \\u0644\\u062a\\u062d\\u0633\\u064a\\u0646\\u0627\\u062a',\n    '\\u062a\\u0646\\u0633\\u064a\\u0642 \\u0627\\u0644\\u0634\\u063a\\u0644 \\u0645\\u0639 \\u0627\\u0644\\u062a\\u0635\\u0645\\u064a\\u0645 \\u0623\\u0648 \\u0627\\u0644\\u062a\\u0635\\u0648\\u064a\\u0631 \\u0644\\u0636\\u0645\\u0627\\u0646 \\u062e\\u0631\\u0648\\u062c \\u0645\\u062d\\u062a\\u0648\\u0649 \\u0642\\u0648\\u064a'\n  ] : [\n    '\\u062a\\u0646\\u0641\\u064a\\u0630 \\u0645\\u0647\\u0627\\u0645 ' + title + ' \\u0627\\u0644\\u064a\\u0648\\u0645\\u064a\\u0629 \\u0628\\u0648\\u0636\\u0648\\u062d',\n    '\\u0645\\u062a\\u0627\\u0628\\u0639\\u0629 \\u0627\\u0644\\u0646\\u062a\\u0627\\u0626\\u062c \\u0648\\u062a\\u062d\\u0633\\u064a\\u0646 \\u0627\\u0644\\u0623\\u062f\\u0627\\u0621',\n    '\\u0627\\u0644\\u062a\\u0639\\u0627\\u0648\\u0646 \\u0645\\u0639 \\u0627\\u0644\\u0641\\u0631\\u064a\\u0642 \\u0644\\u062a\\u062d\\u0648\\u064a\\u0644 \\u0627\\u0644\\u0623\\u0647\\u062f\\u0627\\u0641 \\u0644\\u062e\\u0637\\u0629 \\u062a\\u0646\\u0641\\u064a\\u0630'\n  ];\n  resp.forEach(x => rows.push('- ' + x));\n  rows.push('', '\\u0627\\u0644\\u0645\\u062a\\u0637\\u0644\\u0628\\u0627\\u062a:', '- ' + exp);\n  skills.forEach(skill => rows.push('- ' + skill));\n  rows.push('', '\\u0645\\u0648\\u0642\\u0639 \\u0627\\u0644\\u0639\\u0645\\u0644: ' + location, '\\u0646\\u0648\\u0639 \\u0627\\u0644\\u0639\\u0645\\u0644: ' + workType, '', '\\u0642\\u062f\\u0645 \\u0627\\u0644\\u0622\\u0646 ' + deadline + ':', '[FORM_LINK]');\n  return rows.join('\\n');\n}\nfunction enPost(job, skills) {\n  const title = job.title || 'the role';\n  const location = job.location || 'To be confirmed';\n  const workType = job.employment_type || 'To be confirmed';\n  const exp = job.min_experience != null ? String(job.min_experience) + '+ years of experience' : 'Relevant experience';\n  const deadline = job.deadline ? 'before ' + job.deadline : 'as soon as possible';\n  const social = isSocial(job, skills);\n  const rows = [social ? title + ' needed for content that performs, not just posts that fill a calendar' : title + ' needed to own the role from day one', '', 'Responsibilities:'];\n  (social ? ['Build and manage a practical content calendar','Write captions and content ideas for each platform','Track content/campaign performance and turn insights into improvements','Coordinate with design or production to publish strong assets'] : ['Own the day-to-day execution for the role','Track results and improve performance continuously','Work with the team to turn objectives into practical action']).forEach(x => rows.push('- ' + x));\n  rows.push('', 'Requirements:', '- ' + exp);\n  skills.forEach(skill => rows.push('- ' + skill));\n  rows.push('', 'Location: ' + location, 'Work type: ' + workType, '', 'Apply ' + deadline + ':', '[FORM_LINK]');\n  return rows.join('\\n');\n}\nfunction isWeakPost(post) {\n  const text = String(post || '');\n  if (!text.includes('[FORM_LINK]')) return true;\n  if (!text.includes('\\n- ') && !text.includes('Responsibilities:') && !text.includes('Requirements:')) return true;\n  return false;\n}\nconst skills = cleanList(job.required_skills);\nconst combinedText = [job.title, job.department, job.jd_text, skills.join(' ')].join(' ');\nconst formattedPost = hasArabic(combinedText) ? arPost(job, skills) : enPost(job, skills);\nconst jobPost = isWeakPost(data.job_post) ? formattedPost : data.job_post;\nreturn [{ json: { job_data: job, job_post: jobPost } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        2608
+      ],
+      "name": "Extract Job Data",
+      "id": "d7eafbfe-a22e-4069-a24d-9e190326c890"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://script.google.com/macros/s/YOUR_GOOGLE_APPS_SCRIPT_DEPLOYMENT_ID/exec",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"Content-Type\": \"application/json\"\n}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  job_data: $json.job_data,\n  job_post: $json.job_post\n} }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        544,
+        2608
+      ],
+      "name": "Create Google Form",
+      "executeOnce": false,
+      "retryOnFail": false,
+      "id": "30d66ed9-104b-4ee7-9379-8acd4fa36f34",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "TQcRJeZ0xw40NXwf",
+          "name": "HR"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const googleResponse = $input.first().json;\nconst jobData = $('Extract Job Data').first().json.job_data;\n\nconst timestamp = Date.now();\nconst random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');\nconst jobId = `JOB_${timestamp}_${random}`;\n\nreturn [{\n  json: {\n    job_id:          jobId,\n    title:           jobData.title,\n    department:      jobData.department || '',\n    jd_text:         jobData.jd_text,\n    required_skills: (jobData.required_skills || []).join('; '),\n    min_experience:  jobData.min_experience || 0,\n    min_score:       jobData.min_score || 70,\n    form_link:       googleResponse.formLink,\n    status:          'Open',\n    deadline:        jobData.deadline || '',\n    created_at:      new Date().toISOString(),\n    form_id:         googleResponse.formId\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        768,
+        2592
+      ],
+      "name": "Prepare Airtable Record",
+      "id": "4517d993-33bd-46af-b35e-cd3aa850ed18"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_AIRTABLE_BASE_NAME",
+          "cachedResultUrl": "https://airtable.com/AIRTABLE_BASE_ID"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_JOBS_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Jobs",
+          "cachedResultUrl": "https://airtable.com/AIRTABLE_BASE_ID/AIRTABLE_JOBS_TABLE_ID"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "min_score": "={{ $json.min_score }}",
+            "title": "={{ $json.title }}",
+            "department": "={{ $json.department }}",
+            "jd_text": "={{ $json.jd_text }}",
+            "required_skills": "={{ $json.required_skills }}",
+            "min_experience": "={{ $json.min_experience }}",
+            "form_link": "={{ $json.form_link }}",
+            "status": "={{ $json.status }}",
+            "created_at": "={{ new Date().toISOString() }}",
+            "deadline": "={{ $json.deadline ? new Date($json.deadline).toISOString() : '' }}",
+            "job_id": "={{ $json.job_id }}",
+            "form_id": "={{ $json.form_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "job_id",
+              "displayName": "job_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "department",
+              "displayName": "department",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "jd_text",
+              "displayName": "jd_text",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "required_skills",
+              "displayName": "required_skills",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "min_experience",
+              "displayName": "min_experience",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "min_score",
+              "displayName": "min_score",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "form_link",
+              "displayName": "form_link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "form_id",
+              "displayName": "form_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "deadline",
+              "displayName": "deadline",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Candidates",
+              "displayName": "Candidates",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "CV_Analysis",
+              "displayName": "CV_Analysis",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1024,
+        2592
+      ],
+      "name": "Save Job to Airtable",
+      "id": "08fb486d-1da1-4402-939a-525d8a33b2a1"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=Job created\n\nJob Details:\n{{ (() => {\n  const link = ($('Create Google Form').item.json.formLink || '').replace(/_/g, '%5F');\n  const raw = $('Extract Job Data').item.json.job_post || '';\n  const post = raw.includes('[FORM_LINK]')\n    ? raw.replace('[FORM_LINK]', link)\n    : (raw.trim() + String.fromCharCode(10) + link);\n  return post;\n})() }}\n\nForm:\n{{ ($('Create Google Form').item.json.formLink || '').replace(/_/g, '%5F') }}\n\nEdit form:\n{{ ($('Create Google Form').item.json.editLink || '').replace(/_/g, '%5F') }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1216,
+        2576
+      ],
+      "name": "Confirm Job Creation",
+      "id": "977df023-6f8a-4a20-a6ca-0542d9574eea",
+      "webhookId": "c0837368-72a2-4a30-a496-c774d702b012"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = String($input.first().json.output || '').trim();\nconst clean = raw.replace(/```json/gi, '').replace(/```/g, '').trim();\n\nfunction hasJsonShape(text) {\n  return text.includes('{') && text.includes('}');\n}\n\nfunction extractJson(text) {\n  const first = text.indexOf('{');\n  const last = text.lastIndexOf('}');\n  if (first === -1 || last === -1 || last <= first) return text;\n  return text.slice(first, last + 1);\n}\n\nfunction pick(obj, ...keys) {\n  for (const key of keys) {\n    if (obj && Object.prototype.hasOwnProperty.call(obj, key)) return obj[key];\n  }\n  return undefined;\n}\n\nfunction asArray(value) {\n  if (Array.isArray(value)) return value.map(String).map(s => s.trim()).filter(Boolean);\n  if (value == null || value === '') return [];\n  return String(value)\n    .split(new RegExp('[;,\\\\n\\\\u060C]+'))\n    .map(s => s.trim())\n    .filter(Boolean);\n}\n\nfunction normalizeQuestion(q) {\n  if (typeof q === 'string') return { title: q, type: 'short_answer', required: true };\n  return {\n    title: String(pick(q, 'title', 'question', 'text') || '').trim(),\n    type: pick(q, 'type') || 'short_answer',\n    ...(Array.isArray(q.options) ? { options: q.options } : {}),\n    required: pick(q, 'required') !== false,\n  };\n}\n\nlet parsed;\ntry {\n  parsed = JSON.parse(hasJsonShape(clean) ? extractJson(clean) : clean);\n} catch (e) {\n  // Normal conversational answers from the agent are questions for HR, not errors.\n  return [{\n    json: {\n      type: 'question',\n      message: clean\n    }\n  }];\n}\n\nif (parsed.ask_hr) {\n  return [{ json: { type: 'question', message: String(parsed.ask_hr) } }];\n}\n\nconst sourceJob = pick(parsed, 'job_data', 'jobdata', 'jobData');\nconst jobPost = String(pick(parsed, 'job_post', 'jobpost', 'jobPost') || '').split('[FORMLINK]').join('[FORM_LINK]');\n\nif (!sourceJob || !jobPost) {\n  return [{\n    json: {\n      type: 'question',\n      message: clean\n    }\n  }];\n}\n\nconst customQuestionsRaw = pick(sourceJob, 'custom_questions', 'customquestions', 'customQuestions');\nconst jobData = {\n  title: pick(sourceJob, 'title') || '',\n  department: pick(sourceJob, 'department') ?? null,\n  required_skills: asArray(pick(sourceJob, 'required_skills', 'requiredskills', 'requiredSkills')),\n  min_experience: pick(sourceJob, 'min_experience', 'minexperience', 'minExperience') ?? null,\n  min_score: pick(sourceJob, 'min_score', 'minscore', 'minScore') ?? null,\n  salary_range: pick(sourceJob, 'salary_range', 'salaryrange', 'salaryRange') ?? null,\n  location: pick(sourceJob, 'location') ?? null,\n  employment_type: pick(sourceJob, 'employment_type', 'employmenttype', 'employmentType') ?? null,\n  deadline: pick(sourceJob, 'deadline') ?? null,\n  jd_text: pick(sourceJob, 'jd_text', 'jdtext', 'jdText') || '',\n  custom_questions: Array.isArray(customQuestionsRaw)\n    ? customQuestionsRaw.map(normalizeQuestion).filter(q => q.title)\n    : [],\n};\n\nreturn [{\n  json: {\n    type: 'job',\n    job_data: jobData,\n    job_post: jobPost\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -144,
+        2560
+      ],
+      "name": "AI Response Cleaner",
+      "id": "3a88decc-1b65-4a1c-9163-d684e768d6ac"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        2768
+      ],
+      "name": "OpenRouter",
+      "id": "65f2ab4d-2b14-4e20-a850-2c3bd9fd395e",
+      "credentials": {
+        "openRouterApi": {
+          "id": "VpUansl3XxDGcyJI",
+          "name": "OpenRouter account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "HR Assistant Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversation Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "HR Assistant Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HR Assistant Agent": {
+      "main": [
+        [
+          {
+            "node": "AI Response Cleaner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Question vs Job": {
+      "main": [
+        [
+          {
+            "node": "Ask HR Question",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract Job Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Job Data": {
+      "main": [
+        [
+          {
+            "node": "Create Google Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Google Form": {
+      "main": [
+        [
+          {
+            "node": "Prepare Airtable Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Airtable Record": {
+      "main": [
+        [
+          {
+            "node": "Save Job to Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Job to Airtable": {
+      "main": [
+        [
+          {
+            "node": "Confirm Job Creation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Response Cleaner": {
+      "main": [
+        [
+          {
+            "node": "Question vs Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "HR Assistant Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "7ba7b9aa-3925-4a69-992c-ebb8a238c36a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fede2b4b432858cb57ae0573f0e5769001ae7736eccbb8fe8130e5b76a41312e"
+  },
+  "id": "uTuwx1dcr7TqnpFB",
+  "tags": []
+}
